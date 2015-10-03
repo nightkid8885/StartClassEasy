@@ -9,8 +9,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +17,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuActivity"
-            android:label="@string/title_activity_menu" >
+            android:name=".AdminActivity"
+            android:label="@string/title_activity_admin" >
+        </activity>
+        <activity
+            android:name=".CourseActivity"
+            android:label="@string/title_activity_course" >
+        </activity>
+        <activity
+            android:name=".AttendeeActivity"
+            android:label="@string/title_activity_attendee" >
         </activity>
     </application>
 
