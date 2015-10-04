@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
-            android:src="@mipmap/ic_logo2"
+            android:src="@mipmap/ic_logo"
             android:minHeight="450dp"
             android:minWidth="450dp"
             android:layout_above="@+id/main_email"
@@ -44,7 +44,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="45dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:text="password" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -60,7 +61,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="25dp"/>
+            android:layout_marginBottom="25dp"
+            android:text="abc@abc.com" />
 
         <Button
             android:layout_width="wrap_content"
