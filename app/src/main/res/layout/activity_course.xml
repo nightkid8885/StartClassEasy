@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#E61122"
+        android:background="#03A9F4"
         android:orientation="vertical"
         android:paddingBottom="60px"
         android:paddingLeft="80px"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Course Name"
-            android:textColor="#29E2DF"
+            android:textColor="#ffffff"
             android:id="@+id/CourseNameTv" />
 
         <EditText
@@ -35,7 +35,7 @@
             android:padding="10px"
             android:text="Trainer Name"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#29E2DF" />
+            android:textColor="#ffffff" />
 
         <EditText
             android:id="@+id/ac_conductorNameEt"

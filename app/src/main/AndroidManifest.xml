@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MenuActivity"
+            android:label="Menu">
+        </activity>
+        <activity
             android:name=".AdminActivity"
             android:label="@string/title_activity_admin" >
         </activity>
