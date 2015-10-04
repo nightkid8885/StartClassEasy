@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#E61122"
+        android:orientation="vertical"
+        android:paddingBottom="60px"
+        android:paddingLeft="80px"
+        android:paddingRight="100px"
+        android:paddingTop="60px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Course Name"
+            android:textColor="#29E2DF"
+            android:id="@+id/CourseNameTv" />
+
+        <EditText
+            android:id="@+id/ac_courseNameEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10px" />
+
+        <TextView
+            android:id="@+id/ac_conductorNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10px"
+            android:text="Trainer Name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#29E2DF" />
+
+        <EditText
+            android:id="@+id/ac_conductorNameEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10px" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Course Date"
+            android:id="@+id/ac_courseDateBtn" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/ac_courseDateLv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</LinearLayout>
