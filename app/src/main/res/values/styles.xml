@@ -16,4 +16,8 @@
         <item name="android:background">@drawable/primary_round</item>
     </style>
 
+    <style name= "custom_actionbar_style"></style>
+    <style name= "custom_style" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <!--<item name="android:background">@drawable/action_bar_background</item>-->
+    </style>
 </resources>
