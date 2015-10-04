@@ -15,12 +15,12 @@
         android:paddingTop="60px">
 
         <TextView
+            android:id="@+id/CourseNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Course Name"
-            android:textColor="#29E2DF"
-            android:id="@+id/CourseNameTv" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#29E2DF" />
 
         <EditText
             android:id="@+id/ac_courseNameEt"
@@ -44,10 +44,10 @@
             android:paddingBottom="10px" />
 
         <Button
+            android:id="@+id/ac_courseDateBtn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Course Date"
-            android:id="@+id/ac_courseDateBtn" />
+            android:text="Course Date" />
 
 
     </LinearLayout>
