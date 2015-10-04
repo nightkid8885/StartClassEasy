@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity{
 
+    UserDatabase db;
     Button main_submitBtn;
     EditText main_email, main_password;
 
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity{
         main_email = (EditText) findViewById(R.id.main_email);
         main_password = (EditText) findViewById(R.id.main_password);
         main_submitBtn = (Button) findViewById(R.id.main_submitBtn);
+
+        db = new UserDatabase(this);
 
     }
 

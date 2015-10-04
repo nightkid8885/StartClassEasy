@@ -47,7 +47,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <EditText
-                    android:id="@+id/aat_studentIdt"
+                    android:id="@+id/aat_studentIdEt"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
 
@@ -85,7 +85,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <EditText
-                    android:id="@+id/aat_contactNumbert"
+                    android:id="@+id/aat_contactNumberEt"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
 
@@ -95,6 +95,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:id="@+id/aat_submitBtn"
                 android:text="SUBMIT"/>
 
         </LinearLayout>

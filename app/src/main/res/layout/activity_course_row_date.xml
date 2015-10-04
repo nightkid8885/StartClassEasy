@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Course Date Time"
-        android:id="@+id/acr_courseDateTimeTv"
+        android:id="@+id/acrd_courseDateTimeTv"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -18,7 +18,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/acr_removeDateTimeIv"
+        android:id="@+id/acrd_removeDateTimeIv"
         android:background="@mipmap/ic_minus"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
