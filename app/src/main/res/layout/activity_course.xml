@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#E61122"
+        android:background="#03A9F4"
         android:orientation="vertical"
         android:paddingBottom="60px"
         android:paddingLeft="80px"
@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:text="Course Name"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#29E2DF" />
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/ac_courseNameEt"
@@ -35,7 +36,8 @@
             android:padding="10px"
             android:text="Trainer Name"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#29E2DF" />
+            android:textColor="#ffffff"
+            android:textStyle="bold"  />
 
         <EditText
             android:id="@+id/ac_conductorNameEt"
@@ -43,11 +45,44 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10px" />
 
-        <Button
-            android:id="@+id/ac_courseDateBtn"
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Course Date" />
+            android:id="@+id/ac_createCourseLl"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/ac_saveCourseBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Create Course" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ac_dateAttendeeLl"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/ac_courseDateBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Course Date" />
+
+            <Button
+                android:id="@+id/ac_attendeeBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Attendee" />
+
+        </LinearLayout>
+
 
 
     </LinearLayout>

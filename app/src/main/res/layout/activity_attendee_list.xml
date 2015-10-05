@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.cmms.codetech.startclasseasy.AdminActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aal_searchCourseEt"
+            android:hint="Search Attendee"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/aal_newAttendeeBtn"
+            android:layout_toStartOf="@+id/aal_newAttendeeBtn" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/aal_newAttendeeBtn"
+            android:layout_alignTop="@+id/aal_searchCourseEt"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:drawableLeft="@mipmap/ic_plus"/>
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/aal_listviewLv"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>
