@@ -1,6 +1,5 @@
 package com.cmms.codetech.startclasseasy;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,45 +9,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.view.View.OnClickListener;
 
-public class AdminActivity extends AppCompatActivity {
+public class AttendeeListActivity extends AppCompatActivity {
 
     EditText searchCourseEt;
-    Button addNewCourseBtn;
+    Button addNewAttendeeBtn;
     ListView listViewLv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin);
+        setContentView(R.layout.activity_attendee_list);
 
         initView();
 
-        addNewCourseBtn.setOnClickListener(newCourse);
-
-
+        addNewAttendeeBtn.setOnClickListener(addAttendee);
 
     }
 
     private void initView() {
-        searchCourseEt = (EditText) findViewById(R.id.aa_searchCourseEt);
-        addNewCourseBtn = (Button) findViewById(R.id.aa_newBtn);
-        listViewLv = (ListView) findViewById(R.id.aa_listviewLv);
+
+        searchCourseEt = (EditText) findViewById(R.id.aal_searchCourseEt);
+        addNewAttendeeBtn = (Button) findViewById(R.id.aal_newAttendeeBtn);
+        listViewLv = (ListView) findViewById(R.id.aal_listviewLv);
     }
 
-    OnClickListener newCourse = new OnClickListener() {
+    View.OnClickListener addAttendee = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            startActivity(new Intent(AdminActivity.this,
-                    CourseActivity.class));
+            startActivity(new Intent(AttendeeListActivity.this,
+                    AttendeeActivity.class));
         }
     };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_admin, menu);
+        getMenuInflater().inflate(R.menu.menu_attendee_list, menu);
         return true;
     }
 

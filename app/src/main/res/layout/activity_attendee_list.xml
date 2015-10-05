@@ -18,19 +18,19 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/aa_searchCourseEt"
-            android:hint="Search Course"
+            android:id="@+id/aal_searchCourseEt"
+            android:hint="Search Attendee"
             android:layout_gravity="center_horizontal"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/aa_newBtn"
-            android:layout_toStartOf="@+id/aa_newBtn" />
+            android:layout_toLeftOf="@+id/aal_newAttendeeBtn"
+            android:layout_toStartOf="@+id/aal_newAttendeeBtn" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/aa_newBtn"
-            android:layout_alignTop="@+id/aa_searchCourseEt"
+            android:id="@+id/aal_newAttendeeBtn"
+            android:layout_alignTop="@+id/aal_searchCourseEt"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:background="@null"
@@ -40,7 +40,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/aa_listviewLv"
+        android:id="@+id/aal_listviewLv"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
