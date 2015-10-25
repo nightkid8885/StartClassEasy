@@ -21,6 +21,9 @@ import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.cmms.codetech.startclasseasy.adapter.CourseDateAdapter;
+
+import java.sql.Date;
 import java.util.Calendar;
 
 public class CourseActivity extends AppCompatActivity {
@@ -36,6 +39,8 @@ public class CourseActivity extends AppCompatActivity {
     LinearLayout createCourseLl;
     LinearLayout dateAttendeeLl;
 
+    CourseDateAdapter courseDateAdapter;
+
     private TextView Output;
 
     private int year;
@@ -43,6 +48,8 @@ public class CourseActivity extends AppCompatActivity {
     private int day;
 
     static final int DATE_PICKER_ID = 1111;
+
+    long courseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +62,9 @@ public class CourseActivity extends AppCompatActivity {
         // Get current date by calender
 
         final Calendar c = Calendar.getInstance();
-        year  = c.get(Calendar.YEAR);
+        year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
-        day   = c.get(Calendar.DAY_OF_MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
 
         // Show current date
 
@@ -96,13 +103,30 @@ public class CourseActivity extends AppCompatActivity {
         saveCourseBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                createCourseLl.setVisibility(View.GONE);
-                dateAttendeeLl.setVisibility(View.VISIBLE);
+                UserDatabase dbHelper = new UserDatabase(CourseActivity.this);
 
-                Toast.makeText(getApplicationContext(), "Save course name successfully, then only can add date and attendees, disable edit field", Toast.LENGTH_LONG).show();
-                courseNameEt.setEnabled(false);
-                conductorNameEt.setEnabled(false);
+                if (courseNameEt.getText().toString().matches("")) {
+                    Toast.makeText(getApplicationContext(), "Course name cannot be null", Toast.LENGTH_LONG).show();
+                    courseNameEt.requestFocus();
+                }else{
+                    if (conductorNameEt.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Trainer name cannot be null", Toast.LENGTH_LONG).show();
+                        conductorNameEt.requestFocus();
 
+                    } else {
+                        createCourseLl.setVisibility(View.GONE);
+                        dateAttendeeLl.setVisibility(View.VISIBLE);
+
+                        courseNameEt.setEnabled(false);
+                        conductorNameEt.setEnabled(false);
+
+                        courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString());
+                        //Long courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString());
+
+                        Toast.makeText(getApplicationContext(), "Save course name successfully, then only can add date and attendees, disable edit field", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "CourseID " + String.valueOf(courseID), Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -134,7 +158,7 @@ public class CourseActivity extends AppCompatActivity {
                 // open datepicker dialog.
                 // set date picker for current date
                 // add pickerListener listner to date picker
-                return new DatePickerDialog(this, pickerListener, year, month,day);
+                return new DatePickerDialog(this, pickerListener, year, month, day);
         }
         return null;
     }
@@ -146,40 +170,33 @@ public class CourseActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
 
-            year  = selectedYear;
+            UserDatabase dbHelper = new UserDatabase(CourseActivity.this);
+
+            year = selectedYear;
             month = selectedMonth;
-            day   = selectedDay;
+            day = selectedDay;
 
             // Show selected date
             Toast.makeText(getApplicationContext(), new StringBuilder().append(month + 1)
                     .append("-").append(day).append("-").append(year)
                     .append(" "), Toast.LENGTH_SHORT).show();
-           // Output.setText(new StringBuilder().append(month + 1)
+
+            Toast.makeText(getApplicationContext(), "Course ID " + String.valueOf(courseID), Toast.LENGTH_SHORT).show();
+
+            dbHelper.addCourseDate(courseID, new StringBuilder().append(year)
+                    .append("-").append(month + 1).append("-").append(day)
+                    .append(" 00:00:00").toString());
+            // Output.setText(new StringBuilder().append(month + 1)
             //        .append("-").append(day).append("-").append(year)
-           //         .append(" "));
+            //         .append(" "));
+
+            Toast.makeText(getApplicationContext(), "Count " + String.valueOf(dbHelper.listAllCourse(courseID).size()), Toast.LENGTH_LONG).show();
+
+            courseDateAdapter = new CourseDateAdapter(getApplicationContext(), dbHelper.listAllCourse(courseID));
+            courseDateLv.setAdapter(courseDateAdapter);
+
 
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_course, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

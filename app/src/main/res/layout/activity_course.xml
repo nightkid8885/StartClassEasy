@@ -37,7 +37,7 @@
             android:text="Trainer Name"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ffffff"
-            android:textStyle="bold"  />
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/ac_conductorNameEt"
@@ -45,11 +45,10 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10px" />
 
-
         <LinearLayout
+            android:id="@+id/ac_createCourseLl"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ac_createCourseLl"
             android:orientation="horizontal">
 
             <Button
@@ -62,9 +61,9 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ac_dateAttendeeLl"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ac_dateAttendeeLl"
             android:orientation="horizontal">
 
             <Button
@@ -82,8 +81,6 @@
                 android:text="Attendee" />
 
         </LinearLayout>
-
-
 
     </LinearLayout>
 

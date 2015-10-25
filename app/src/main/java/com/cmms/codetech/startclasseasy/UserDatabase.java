@@ -1,13 +1,25 @@
 package com.cmms.codetech.startclasseasy;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.cmms.codetech.startclasseasy.model.CourseDate;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Esu on 10/4/15.
  */
 public class UserDatabase extends SQLiteOpenHelper {
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String SQLITE_TABLE_COURSE = "crs_mst";
     private static final String SQLITE_TABLE_COURSE_DATE = "crs_ls1";
@@ -59,7 +71,7 @@ public class UserDatabase extends SQLiteOpenHelper {
             + AUDIT_USER
             + " TEXT,"
             + AUDIT_DATE
-            + " DATETIME";
+            + " )";
 
     private static final String SQLITE_TABLE_CRS_LS1 = "CREATE TABLE if not exists "
             + SQLITE_TABLE_COURSE_DATE
@@ -67,13 +79,13 @@ public class UserDatabase extends SQLiteOpenHelper {
             + MST_ROWID
             + " integer NOT NULL,"
             + CRS_LS1_CRS_DATE
-            + " DATE,"
+            + " ,"
             + AUDIT_USER
             + " TEXT,"
             + AUDIT_DATE
-            + " DATETIME,"
+            + " ,"
             + ROWID
-            + " integer PRIMARY KEY autoincrement";
+            + " integer PRIMARY KEY autoincrement)";
 
     private static final String SQLITE_TABLE_CRS_LS2 = "CREATE TABLE if not exists "
             + SQLITE_TABLE_ATTENDEES
@@ -93,7 +105,58 @@ public class UserDatabase extends SQLiteOpenHelper {
             + AUDIT_USER
             + " TEXT,"
             + AUDIT_DATE
-            + " DATETIME,"
+            + " ,"
             + ROWID
-            + " integer PRIMARY KEY autoincrement";
+            + " integer PRIMARY KEY autoincrement)";
+
+    public long addCourse(String courseName, String trainerName){
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(CRS_MST_CRS_NAME, courseName);
+        values.put(CRS_MST_CON_NAME, trainerName);
+        values.put(AUDIT_USER, "daryl");
+        values.put(AUDIT_DATE, dateFormat.format(new java.util.Date()));
+
+        return db.insert(SQLITE_TABLE_COURSE, null, values);
+    }
+
+    public long addCourseDate(long courseID, String courseDate){
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        Log.d("Date", courseDate);
+        values.put(MST_ROWID, courseID);
+        values.put(CRS_LS1_CRS_DATE, courseDate);
+        values.put(AUDIT_USER, "daryl");
+        values.put(AUDIT_DATE, dateFormat.format(new java.util.Date()));
+
+        return db.insert(SQLITE_TABLE_COURSE_DATE, null, values);
+    }
+
+    public List<CourseDate> listAllCourse(long courseID){
+
+        List<CourseDate> list = new ArrayList<CourseDate>();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
+        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID);
+
+        Log.e("Select Query", selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new CourseDate(cursor.getString(cursor.getColumnIndex(CRS_LS1_CRS_DATE))));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        Log.e("Check Size", String.valueOf(list.size()));
+
+        return list;
+    }
 }

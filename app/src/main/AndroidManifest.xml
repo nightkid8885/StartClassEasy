@@ -21,8 +21,8 @@
             android:label="Menu">
         </activity>
         <activity
-            android:name=".AdminActivity"
-            android:label="@string/title_activity_admin" >
+            android:name=".AttendeeListActivity"
+            android:label="@string/title_activity_attendee_list" >
         </activity>
         <activity
             android:name=".CourseActivity"
@@ -31,6 +31,10 @@
         <activity
             android:name=".AttendeeActivity"
             android:label="@string/title_activity_attendee" >
+        </activity>
+        <activity
+            android:name=".AdminActivity"
+            android:label="@string/title_activity_admin" >
         </activity>
     </application>
 
