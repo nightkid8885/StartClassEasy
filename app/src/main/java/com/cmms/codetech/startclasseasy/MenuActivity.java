@@ -20,13 +20,15 @@ public class MenuActivity extends ListActivity {
     String[] itemname = {
             "Calendar",
             "Feedback",
-            "Admins"
+            "Admins",
+            "Students"
 
     };
     Integer[] imgid = {
             R.drawable.pic1,
             R.drawable.pic2,
-            R.drawable.pic3
+            R.drawable.pic3,
+            R.drawable.pic3,
     };
 
     @Override
@@ -63,8 +65,13 @@ public class MenuActivity extends ListActivity {
                     break;
                 case 2:
                     Toast.makeText(getApplicationContext(), "Administration", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(), AdminActivity.class);
-                    startActivity(i);
+                    Intent iAdmin = new Intent(getApplicationContext(), AdminActivity.class);
+                    startActivity(iAdmin);
+                    break;
+                case 3:
+                    Toast.makeText(getApplicationContext(), "Student", Toast.LENGTH_SHORT).show();
+                    Intent iStudent = new Intent(getApplicationContext(), AttendeeListActivity.class);
+                    startActivity(iStudent);
                     break;
                 default:
                     break;

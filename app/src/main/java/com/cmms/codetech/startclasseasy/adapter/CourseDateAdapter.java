@@ -9,8 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.Toast;
 
+import com.cmms.codetech.startclasseasy.CourseActivity;
 import com.cmms.codetech.startclasseasy.R;
+import com.cmms.codetech.startclasseasy.UserDatabase;
 import com.cmms.codetech.startclasseasy.model.CourseDate;
 
 import java.util.List;
@@ -23,10 +28,18 @@ public class CourseDateAdapter  extends ArrayAdapter<CourseDate> {
     private List<CourseDate> courseDateList;
     private Context context;
 
-    public CourseDateAdapter(Context ctx, List<CourseDate> courseDateList) {
+    long courseDate_rowID;
+    long course_rowID;
+    boolean isEditMode;
+
+
+    public CourseDateAdapter(Context ctx, List<CourseDate> courseDateList, Long courseID, Boolean isEditMode) {
         super(ctx, R.layout.activity_course_row_date, courseDateList);
         this.courseDateList = courseDateList;
         this.context = ctx;
+        this.course_rowID = courseID;
+        this.isEditMode = isEditMode;
+
     }
 
     @Override
@@ -51,13 +64,15 @@ public class CourseDateAdapter  extends ArrayAdapter<CourseDate> {
 
         if (convertView == null) {
 
-            Log.e("1", "1");
-
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.activity_course_row_date, null);
 
             TextView courseDate = (TextView) v.findViewById(R.id.acrd_courseDateTimeTv);
             ImageView minus = (ImageView) v.findViewById(R.id.acrd_removeDateTimeIv);
+
+            if (isEditMode){
+                minus.setVisibility(View.GONE);
+            }
 
             minus.setTag(position);
             holder.courseDate = courseDate;
@@ -85,6 +100,37 @@ public class CourseDateAdapter  extends ArrayAdapter<CourseDate> {
 
         @Override
         public void onClick(View v) {
+
+            RelativeLayout rl = (RelativeLayout) v.getParent();
+
+            Log.e("TAG", String.valueOf(courseDateList.get((Integer) v.getTag()).getRowID()));
+
+            courseDate_rowID = courseDateList.get((Integer) v.getTag()).getRowID();
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getRootView().getContext());
+            alertDialogBuilder.setMessage("Are you sure,You wanted to make decision");
+
+            alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Toast.makeText(context, "You clicked yes button", Toast.LENGTH_LONG).show();
+                    UserDatabase dbHelper = new UserDatabase(context);
+                    dbHelper.deleteCourseDate(courseDate_rowID);
+
+                    ((CourseActivity)getContext()).inflateCourseDateListView(course_rowID, false);
+
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //finish();
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     };
 }

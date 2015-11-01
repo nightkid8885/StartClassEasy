@@ -18,10 +18,11 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/aal_searchCourseEt"
+            android:id="@+id/aal_searchAttendeeEt"
             android:hint="Search Attendee"
             android:layout_gravity="center_horizontal"
             android:layout_centerVertical="true"
+            android:singleLine="true"
             android:layout_toLeftOf="@+id/aal_newAttendeeBtn"
             android:layout_toStartOf="@+id/aal_newAttendeeBtn" />
 
@@ -30,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/aal_newAttendeeBtn"
-            android:layout_alignTop="@+id/aal_searchCourseEt"
+            android:layout_alignTop="@+id/aal_searchAttendeeEt"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:background="@null"
