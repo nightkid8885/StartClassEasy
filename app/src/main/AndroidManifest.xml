@@ -22,19 +22,33 @@
         </activity>
         <activity
             android:name=".AttendeeListActivity"
-            android:label="@string/title_activity_attendee_list" >
+            android:label="@string/title_activity_attendee_list"
+            android:parentActivityName=".MenuActivity">
         </activity>
         <activity
             android:name=".CourseActivity"
-            android:label="@string/title_activity_course" >
+            android:label="@string/title_activity_course"
+            android:parentActivityName=".AdminActivity">
         </activity>
         <activity
             android:name=".AttendeeActivity"
-            android:label="@string/title_activity_attendee" >
+            android:label="@string/title_activity_attendee"
+            android:parentActivityName=".AttendeeListActivity">
         </activity>
         <activity
             android:name=".AdminActivity"
-            android:label="@string/title_activity_admin" >
+            android:label="@string/title_activity_admin"
+            android:parentActivityName=".MenuActivity">
+        </activity>
+        <activity
+            android:name=".ChooseAttendeeActivity"
+            android:label="@string/title_activity_admin"
+            android:parentActivityName=".CourseActivity">
+        </activity>
+        <activity
+            android:name=".AttendanceActivity"
+            android:label="@string/title_activity_admin"
+            android:parentActivityName=".CourseActivity">
         </activity>
     </application>
 

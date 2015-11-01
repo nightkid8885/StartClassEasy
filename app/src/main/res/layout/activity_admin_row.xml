@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Course Status"
-        android:id="@+id/textView2"
+        android:id="@+id/aar_courseStatusTv"
         android:layout_alignBottom="@+id/aar_conductorTv"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
