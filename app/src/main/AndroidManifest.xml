@@ -50,6 +50,11 @@
             android:label="@string/title_activity_admin"
             android:parentActivityName=".CourseActivity">
         </activity>
+        <activity
+            android:name=".FeedbackActivity"
+            android:label="@string/title_feedback_form"
+            android:parentActivityName=".MenuActivity">
+        </activity>
     </application>
 
 </manifest>
