@@ -12,19 +12,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.cmms.codetech.startclasseasy.adapter.CourseDateAdapter;
+import com.cmms.codetech.startclasseasy.model.Course;
+import com.cmms.codetech.startclasseasy.model.CourseDate;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
 
@@ -33,23 +40,35 @@ public class CourseActivity extends AppCompatActivity {
 
     Button saveCourseBtn;
     Button courseDateBtn;
-    Button attendeeBtn;
+    Button addAttendeeBtn;
+    Button editBtn;
+    ToggleButton courseStatusTb;
     ListView courseDateLv;
+    ImageView minusIv;
 
     LinearLayout createCourseLl;
     LinearLayout dateAttendeeLl;
+    LinearLayout editCourseLl;
 
     CourseDateAdapter courseDateAdapter;
-
-    private TextView Output;
 
     private int year;
     private int month;
     private int day;
 
-    static final int DATE_PICKER_ID = 1111;
-
+    boolean isEditMode = false;
     long courseID;
+
+    UserDatabase dbHelper = new UserDatabase(CourseActivity.this);
+    Bundle extras;
+
+    static final int DATE_PICKER_ID = 1111;
+    private int mRequestCode101 = 101;
+
+
+    List<CourseDate> courseDateList = new ArrayList<CourseDate>();
+
+    final static String TAG = "CourseActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +77,32 @@ public class CourseActivity extends AppCompatActivity {
 
         initView();
 
+        Log.e(TAG, "1");
+
+        extras = getIntent().getExtras();
+        isEditMode = extras.getBoolean("isEditMode");
+
+        if (isEditMode){
+            courseNameEt.setEnabled(false);
+            conductorNameEt.setEnabled(false);
+            courseStatusTb.setEnabled(false);
+            courseDateLv.setEnabled(false);
+            createCourseLl.setVisibility(View.GONE);
+            dateAttendeeLl.setVisibility(View.GONE);
+            editCourseLl.setVisibility(View.VISIBLE);
+            courseDateLv.setClickable(false);
+
+            List<Course> course = dbHelper.getCourse(extras.getLong("rowID"));
+            String courseName = course.get(0).getCourseName();
+            String trainerName = course.get(0).getCourseTrainer();
+            //String courseStatus = course.get(0).getCourseStatus();
+
+            courseNameEt.setText(courseName);
+            conductorNameEt.setText(trainerName);
+
+            inflateCourseDateListView(extras.getLong("rowID"), isEditMode);
+
+        }
         //http://androidexample.com/In_this_example_creating_a_date_picker_to_pick_day__month_year_of_date/index.php?view=article_discription&aid=89&aaid=113
         // Get current date by calender
 
@@ -66,14 +111,59 @@ public class CourseActivity extends AppCompatActivity {
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
 
-        // Show current date
+        courseDateLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-//        Output.setText(new StringBuilder()
-//                // Month is 0 based, just add 1
-//                .append(month + 1).append("-").append(day).append("-")
-//                .append(year).append(" "));
+                Intent i = new Intent(CourseActivity.this, AttendanceActivity.class);
+                i.putExtra("isEditMode", false);
 
-        // Button listener to show date picker dialog
+                if (isEditMode){
+                    i.putExtra("rowID", courseDateList.get(position).getRowID());
+                    i.putExtra("courseDate", courseDateList.get(position).getCourseDate());
+                    i.putExtra("courseID", extras.getLong("rowID"));
+                }else{
+                    i.putExtra("rowID", courseDateList.get(position).getRowID());
+                    i.putExtra("courseDate", courseDateList.get(position).getCourseDate());
+                    i.putExtra("courseID", courseID);
+                }
+
+                startActivity(i);
+
+            }
+        });
+
+        editBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createCourseLl.setVisibility(View.GONE);
+                dateAttendeeLl.setVisibility(View.VISIBLE);
+                editCourseLl.setVisibility(View.GONE);
+
+                courseNameEt.setEnabled(false);
+                conductorNameEt.setEnabled(false);
+                courseStatusTb.setEnabled(true);
+                courseDateLv.setEnabled(true);
+
+                inflateCourseDateListView(extras.getLong("rowID"), false);
+            }
+        });
+
+        addAttendeeBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CourseActivity.this, ChooseAttendeeActivity.class);
+                i.putExtra("isEditMode", false);
+
+                if (isEditMode){
+                    i.putExtra("courseID", extras.getLong("rowID"));
+                }else{
+                    i.putExtra("courseID", courseID);
+                }
+
+                startActivity(i);
+            }
+        });
 
         courseDateBtn.setOnClickListener(new OnClickListener() {
 
@@ -87,23 +177,9 @@ public class CourseActivity extends AppCompatActivity {
 
         });
 
-        attendeeBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT);
-                Intent i = new Intent(getApplicationContext(), AttendeeListActivity.class);
-                startActivity(i);
-
-            }
-
-        });
-
         saveCourseBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserDatabase dbHelper = new UserDatabase(CourseActivity.this);
 
                 if (courseNameEt.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Course name cannot be null", Toast.LENGTH_LONG).show();
@@ -117,13 +193,18 @@ public class CourseActivity extends AppCompatActivity {
                         createCourseLl.setVisibility(View.GONE);
                         dateAttendeeLl.setVisibility(View.VISIBLE);
 
+                        courseStatusTb = (ToggleButton) findViewById(R.id.CourseStatusTb);
+
+                        String courseStatus;
+
+                        courseStatus = courseStatusTb.getText().toString();
+
                         courseNameEt.setEnabled(false);
                         conductorNameEt.setEnabled(false);
 
-                        courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString());
+                        courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString(), courseStatus);
                         //Long courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString());
 
-                        Toast.makeText(getApplicationContext(), "Save course name successfully, then only can add date and attendees, disable edit field", Toast.LENGTH_LONG).show();
                         Toast.makeText(getApplicationContext(), "CourseID " + String.valueOf(courseID), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -133,21 +214,45 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
         courseNameEt = (EditText) findViewById(R.id.ac_courseNameEt);
         conductorNameEt = (EditText) findViewById(R.id.ac_conductorNameEt);
 
+
         saveCourseBtn = (Button) findViewById(R.id.ac_saveCourseBtn);
         courseDateBtn = (Button) findViewById(R.id.ac_courseDateBtn);
-        attendeeBtn = (Button) findViewById(R.id.ac_attendeeBtn);
+        addAttendeeBtn = (Button) findViewById(R.id.ac_addAttendeeBtn);
+        editBtn = (Button) findViewById(R.id.ac_editBtn);
+
+        courseStatusTb = (ToggleButton) findViewById(R.id.CourseStatusTb);
 
         courseDateLv = (ListView) findViewById(R.id.ac_courseDateLv);
         createCourseLl = (LinearLayout) findViewById(R.id.ac_createCourseLl);
         dateAttendeeLl = (LinearLayout) findViewById(R.id.ac_dateAttendeeLl);
+        editCourseLl = (LinearLayout) findViewById(R.id.ac_editCourseLl);
 
         createCourseLl.setVisibility(View.VISIBLE);
         dateAttendeeLl.setVisibility(View.GONE);
+        editCourseLl.setVisibility(View.GONE);
 
-        Output = (TextView) findViewById(R.id.ac_conductorNameTv);
+        minusIv = (ImageView) courseDateLv.findViewById(R.id.acrd_removeDateTimeIv);
+
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putLong("rowID", extras.getLong("rowID"));
+        savedInstanceState.putBoolean("isEditMode", isEditMode);
+
+        Log.e(TAG, "2");
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        courseID = savedInstanceState.getLong("rowID");
+        isEditMode = savedInstanceState.getBoolean("isEditMode");
+
+        Log.e(TAG, "3");
     }
 
     @Override
@@ -170,8 +275,6 @@ public class CourseActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
 
-            UserDatabase dbHelper = new UserDatabase(CourseActivity.this);
-
             year = selectedYear;
             month = selectedMonth;
             day = selectedDay;
@@ -190,13 +293,17 @@ public class CourseActivity extends AppCompatActivity {
             //        .append("-").append(day).append("-").append(year)
             //         .append(" "));
 
-            Toast.makeText(getApplicationContext(), "Count " + String.valueOf(dbHelper.listAllCourse(courseID).size()), Toast.LENGTH_LONG).show();
-
-            courseDateAdapter = new CourseDateAdapter(getApplicationContext(), dbHelper.listAllCourse(courseID));
-            courseDateLv.setAdapter(courseDateAdapter);
-
+            inflateCourseDateListView(courseID, isEditMode);
 
         }
     };
+
+    public void inflateCourseDateListView(Long courseID, boolean mode){
+
+        courseDateList = dbHelper.listCourseDate(courseID);
+
+        courseDateAdapter = new CourseDateAdapter(this, courseDateList, courseID, mode);
+        courseDateLv.setAdapter(courseDateAdapter);
+    }
 
 }
