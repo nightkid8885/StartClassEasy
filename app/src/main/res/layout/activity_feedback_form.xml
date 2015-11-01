@@ -256,7 +256,7 @@
                     <RatingBar
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/aff_p2_Q3_ratingBar"
+                        android:id="@+id/aff_p2_Q3_Rb"
                         android:layout_gravity="center_horizontal" />
                 </LinearLayout>
             </LinearLayout>
