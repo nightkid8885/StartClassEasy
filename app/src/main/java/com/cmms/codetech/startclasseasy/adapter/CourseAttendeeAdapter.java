@@ -11,12 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cmms.codetech.startclasseasy.AttendeeListActivity;
+import com.cmms.codetech.startclasseasy.StudentListActivity;
 import com.cmms.codetech.startclasseasy.R;
 import com.cmms.codetech.startclasseasy.UserDatabase;
 import com.cmms.codetech.startclasseasy.model.Attendee;
@@ -177,7 +176,7 @@ public class CourseAttendeeAdapter extends ArrayAdapter<Attendee> implements Fil
                     UserDatabase dbHelper = new UserDatabase(context);
                     dbHelper.deleteAttendee(attendee_rowID);
 
-                    ((AttendeeListActivity) getContext()).inflateAttendeeList();
+                    ((StudentListActivity) getContext()).inflateAttendeeList();
 
                 }
             });

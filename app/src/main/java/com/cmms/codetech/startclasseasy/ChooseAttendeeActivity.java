@@ -1,6 +1,7 @@
 package com.cmms.codetech.startclasseasy;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.cmms.codetech.startclasseasy.adapter.CourseChooseAttendeeAdapter;
 import com.cmms.codetech.startclasseasy.model.Attendee;
@@ -32,7 +34,11 @@ public class ChooseAttendeeActivity extends Activity {
     ArrayAdapter<String> adapter;
     UserDatabase dbHelper = new UserDatabase(ChooseAttendeeActivity.this);
 
+    final ArrayList<String> selectedItems = new ArrayList<String>();
+    final ArrayList<Long> selectedItemsRowID = new ArrayList<Long>();
+
     List<Attendee> attendees = new ArrayList<Attendee>();
+    private int mRequestCode101 = 101;
     Bundle extras;
 
     @Override
@@ -43,26 +49,7 @@ public class ChooseAttendeeActivity extends Activity {
         initView();
         extras = getIntent().getExtras();
 
-        attendees = dbHelper.listAllAttendees();
-        final ArrayList<String> selectedItems = new ArrayList<String>();
-        final ArrayList<Long> selectedItemsRowID = new ArrayList<Long>();
-
-        //courseChooseAttendeeAdapter = new CourseChooseAttendeeAdapter(this, attendees);
-        //chooseAttendeeLv.setAdapter(courseChooseAttendeeAdapter);
-
-        //String[] attendeesList = getResources().getStringArray(R.array.sports_array);
-        String[] attendeesList = new String[attendees.size()];
-        Long[] rowIDtoInsert = new Long[attendees.size()];
-
-        for (int i = 0; i < attendees.size(); i++) {
-            attendeesList[i] = attendees.get(i).getAttendeeName() + " (" + attendees.get(i).getAttendeeContact() + ") ";
-            rowIDtoInsert[i] = attendees.get(i).getRowID();
-        }
-
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, attendeesList);
-        chooseAttendeeLv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        chooseAttendeeLv.setAdapter(adapter);
-
+        inflateStudent();
 
         chooseAttendeeLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,7 +113,11 @@ public class ChooseAttendeeActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                finish();
+                Intent i = new Intent(ChooseAttendeeActivity.this, StudentActivity.class);
+
+                i.putExtra("isEditMode", false);
+
+                startActivityForResult(i, mRequestCode101);
 
 //                int len = chooseAttendeeLv.getCount();
 //                Log.e("Len", String.valueOf(len));
@@ -142,6 +133,36 @@ public class ChooseAttendeeActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == mRequestCode101) {
+            Log.e("DEBUG_TAG", String.valueOf(resultCode));
+            if (resultCode == Activity.RESULT_OK) {
+                //Toast.makeText(StudentListActivity.this, String.valueOf(data.getExtras().getBoolean("inserted")), Toast.LENGTH_LONG).show();
+                //attendeeAdapter.notifyDataSetChanged();
+                inflateStudent();
+            }
+        }
+    }
+
+    private void inflateStudent() {
+        attendees = dbHelper.listAllAttendees();
+
+        String[] attendeesList = new String[attendees.size()];
+        Long[] rowIDtoInsert = new Long[attendees.size()];
+
+        for (int i = 0; i < attendees.size(); i++) {
+            attendeesList[i] = attendees.get(i).getAttendeeName() + " (" + attendees.get(i).getAttendeeContact() + ") ";
+            rowIDtoInsert[i] = attendees.get(i).getRowID();
+        }
+
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, attendeesList);
+        chooseAttendeeLv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        chooseAttendeeLv.setAdapter(adapter);
     }
 
     private void initView() {

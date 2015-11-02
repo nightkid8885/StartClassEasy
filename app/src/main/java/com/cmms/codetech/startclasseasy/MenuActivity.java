@@ -1,16 +1,10 @@
 package com.cmms.codetech.startclasseasy;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -67,12 +61,12 @@ public class MenuActivity extends ListActivity {
                     break;
                 case 2:
                     Toast.makeText(getApplicationContext(), "Administration", Toast.LENGTH_SHORT).show();
-                    Intent iAdmin = new Intent(getApplicationContext(), AdminActivity.class);
+                    Intent iAdmin = new Intent(getApplicationContext(), CourseListActivity.class);
                     startActivity(iAdmin);
                     break;
                 case 3:
                     Toast.makeText(getApplicationContext(), "Student", Toast.LENGTH_SHORT).show();
-                    Intent iStudent = new Intent(getApplicationContext(), AttendeeListActivity.class);
+                    Intent iStudent = new Intent(getApplicationContext(), StudentListActivity.class);
                     startActivity(iStudent);
                     break;
                 default:

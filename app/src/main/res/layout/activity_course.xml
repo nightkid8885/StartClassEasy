@@ -16,32 +16,45 @@
 
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/CourseNameTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="Course Name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
 
-            <ToggleButton
-                android:id="@+id/CourseStatusTb"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
+                android:id="@+id/courseStatusRg"
                 android:layout_weight="1"
-                android:textOff="Class End"
-                android:textOn="Class On"
-                android:checked="true"
-                android:text="Course Status"/>
+                android:orientation="horizontal"
+                android:gravity="center|end">
+
+                <RadioButton
+                    android:id="@+id/courseOnRb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="ON"/>
+
+                <RadioButton
+                    android:id="@+id/courseOffRb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="OFF" />
+
+            </RadioGroup>
+
 
         </LinearLayout>
 
@@ -109,7 +122,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Course Date" />
+                android:text="Add Date" />
 
             <Button
                 android:id="@+id/ac_addAttendeeBtn"

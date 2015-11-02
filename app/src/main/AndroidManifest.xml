@@ -21,22 +21,22 @@
             android:label="Menu">
         </activity>
         <activity
-            android:name=".AttendeeListActivity"
+            android:name=".StudentListActivity"
             android:label="@string/title_activity_attendee_list"
             android:parentActivityName=".MenuActivity">
         </activity>
         <activity
             android:name=".CourseActivity"
             android:label="@string/title_activity_course"
-            android:parentActivityName=".AdminActivity">
+            android:parentActivityName=".CourseListActivity">
         </activity>
         <activity
-            android:name=".AttendeeActivity"
+            android:name=".StudentActivity"
             android:label="@string/title_activity_attendee"
-            android:parentActivityName=".AttendeeListActivity">
+            android:parentActivityName=".StudentListActivity">
         </activity>
         <activity
-            android:name=".AdminActivity"
+            android:name=".CourseListActivity"
             android:label="@string/title_activity_admin"
             android:parentActivityName=".MenuActivity">
         </activity>

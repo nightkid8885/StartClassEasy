@@ -1,25 +1,20 @@
 package com.cmms.codetech.startclasseasy;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 import com.cmms.codetech.startclasseasy.adapter.CourseAdapter;
 
-public class AdminActivity extends AppCompatActivity {
+public class CourseListActivity extends AppCompatActivity {
 
     EditText searchCourseEt;
     Button addNewCourseBtn;
@@ -29,7 +24,7 @@ public class AdminActivity extends AppCompatActivity {
 
     CourseAdapter courseAdapter;
 
-    UserDatabase dbHelper = new UserDatabase(AdminActivity.this);
+    UserDatabase dbHelper = new UserDatabase(CourseListActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +67,7 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent i = new Intent(AdminActivity.this, CourseActivity.class);
+                Intent i = new Intent(CourseListActivity.this, CourseActivity.class);
 
                 i.putExtra("rowID", dbHelper.listAllCourse().get(position).getRowID());
                 i.putExtra("isEditMode", true);
@@ -95,7 +90,7 @@ public class AdminActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            Intent i = new Intent(AdminActivity.this, CourseActivity.class);
+            Intent i = new Intent(CourseListActivity.this, CourseActivity.class);
             i.putExtra("isEditMode", false);
             startActivity(i);
         }
