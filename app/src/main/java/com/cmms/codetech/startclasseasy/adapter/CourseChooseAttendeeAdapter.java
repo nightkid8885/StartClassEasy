@@ -1,8 +1,6 @@
 package com.cmms.codetech.startclasseasy.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +10,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cmms.codetech.startclasseasy.AttendeeListActivity;
-import com.cmms.codetech.startclasseasy.ChooseAttendeeActivity;
-import com.cmms.codetech.startclasseasy.CourseActivity;
 import com.cmms.codetech.startclasseasy.R;
-import com.cmms.codetech.startclasseasy.UserDatabase;
 import com.cmms.codetech.startclasseasy.model.Attendee;
-import com.cmms.codetech.startclasseasy.model.Course;
 
 import java.util.ArrayList;
 import java.util.List;

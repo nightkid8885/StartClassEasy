@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -42,7 +44,8 @@ public class CourseActivity extends AppCompatActivity {
     Button courseDateBtn;
     Button addAttendeeBtn;
     Button editBtn;
-    ToggleButton courseStatusTb;
+    RadioGroup courseStatusRg;
+    RadioButton courseStatusRb;
     ListView courseDateLv;
     ImageView minusIv;
 
@@ -85,7 +88,7 @@ public class CourseActivity extends AppCompatActivity {
         if (isEditMode){
             courseNameEt.setEnabled(false);
             conductorNameEt.setEnabled(false);
-            courseStatusTb.setEnabled(false);
+            courseStatusRg.setEnabled(false);
             courseDateLv.setEnabled(false);
             createCourseLl.setVisibility(View.GONE);
             dateAttendeeLl.setVisibility(View.GONE);
@@ -142,7 +145,7 @@ public class CourseActivity extends AppCompatActivity {
 
                 courseNameEt.setEnabled(false);
                 conductorNameEt.setEnabled(false);
-                courseStatusTb.setEnabled(true);
+                courseStatusRg.setEnabled(true);
                 courseDateLv.setEnabled(true);
 
                 inflateCourseDateListView(extras.getLong("rowID"), false);
@@ -182,27 +185,26 @@ public class CourseActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (courseNameEt.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Course name cannot be null", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Course name cannot be empty", Toast.LENGTH_LONG).show();
                     courseNameEt.requestFocus();
                 }else{
                     if (conductorNameEt.getText().toString().matches("")) {
-                        Toast.makeText(getApplicationContext(), "Trainer name cannot be null", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Trainer name cannot be empty", Toast.LENGTH_LONG).show();
                         conductorNameEt.requestFocus();
 
                     } else {
                         createCourseLl.setVisibility(View.GONE);
                         dateAttendeeLl.setVisibility(View.VISIBLE);
 
-                        courseStatusTb = (ToggleButton) findViewById(R.id.CourseStatusTb);
-
                         String courseStatus;
-
-                        courseStatus = courseStatusTb.getText().toString();
 
                         courseNameEt.setEnabled(false);
                         conductorNameEt.setEnabled(false);
 
-                        courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString(), courseStatus);
+                        int courseStatusID = courseStatusRg.getCheckedRadioButtonId();
+                        courseStatusRb = (RadioButton) findViewById(courseStatusID);
+
+                        courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString(), String.valueOf(courseStatusRb.getText()));
                         //Long courseID = dbHelper.addCourse(courseNameEt.getText().toString(), conductorNameEt.getText().toString());
 
                         Toast.makeText(getApplicationContext(), "CourseID " + String.valueOf(courseID), Toast.LENGTH_LONG).show();
@@ -217,14 +219,12 @@ public class CourseActivity extends AppCompatActivity {
 
         courseNameEt = (EditText) findViewById(R.id.ac_courseNameEt);
         conductorNameEt = (EditText) findViewById(R.id.ac_conductorNameEt);
-
+        courseStatusRg = (RadioGroup) findViewById(R.id.courseStatusRg);
 
         saveCourseBtn = (Button) findViewById(R.id.ac_saveCourseBtn);
         courseDateBtn = (Button) findViewById(R.id.ac_courseDateBtn);
         addAttendeeBtn = (Button) findViewById(R.id.ac_addAttendeeBtn);
         editBtn = (Button) findViewById(R.id.ac_editBtn);
-
-        courseStatusTb = (ToggleButton) findViewById(R.id.CourseStatusTb);
 
         courseDateLv = (ListView) findViewById(R.id.ac_courseDateLv);
         createCourseLl = (LinearLayout) findViewById(R.id.ac_createCourseLl);

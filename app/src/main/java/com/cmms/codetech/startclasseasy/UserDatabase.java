@@ -25,6 +25,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     private static final String SQLITE_TABLE_COURSE = "crs_mst";
     private static final String SQLITE_TABLE_COURSE_DATE = "crs_ls1";
+    private static final String SQLITE_TABLE_COURSE_FEEDBACK = "crs_ls2";
     private static final String SQLITE_TABLE_ATTENDEES_COURSES = "atd_ls1";
     private static final String SQLITE_TABLE_ATTENDEES_ATTENDANCE = "atd_ls2";
     private static final String SQLITE_TABLE_ATTENDEES = "atd_mst";
@@ -40,18 +41,31 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     public static final String CRS_LS1_CRS_DATE = "crs_ls1_crs_date";
 
-    public static final String ATD_LS1_CRS_ID = "atd_ls1_atd_course";
-    public static final String ATD_LS1_ATD_STS = "atd_ls1_atd_sts";
-    public static final String ATD_LS1_CRS_DATE = "atd_ls1_crs_date";
+    public static final String CRS_LS2_CRS_ID = "crs_ls2_crs_id";
+    public static final String CRS_LS2_STU_ID = "crs_ls2_stu_id";
+    public static final String CRS_LS2_ANS_1 = "crs_ls2_ans_1";
+    public static final String CRS_LS2_ANS_2 = "crs_ls2_ans_2";
+    public static final String CRS_LS2_ANS_3 = "crs_ls2_ans_3";
+    public static final String CRS_LS2_ANS_4 = "crs_ls2_ans_4";
+    public static final String CRS_LS2_ANS_5 = "crs_ls2_ans_5";
+    public static final String CRS_LS2_ANS_6 = "crs_ls2_ans_6";
+    public static final String CRS_LS2_ANS_7 = "crs_ls2_ans_7";
+    public static final String CRS_LS2_ANS_8 = "crs_ls2_ans_8";
+    public static final String CRS_LS2_ANS_9 = "crs_ls2_ans_9";
 
-    public static final String ATD_LS2_DATE_ID = "atd_ls2_date_id";
-    public static final String ATD_LS2_ATD_STS = "atd_ls2_atd_sts";
 
-    public static final String ATD_MST_NAME = "atd_mst_name";
-    public static final String ATD_MST_ID = "atd_mst_id";
-    public static final String ATD_MST_GENDER = "atd_mst_gen";
-    public static final String ATD_MST_CONTACT = "atd_mst_tel";
-    public static final String ATD_MST_EMAIL = "atd_mst_email";
+    public static final String STU_LS1_CRS_ID = "stu_ls1_atd_course";
+    public static final String STU_LS1_ATD_STS = "stu_ls1_atd_sts";
+    public static final String STU_LS1_CRS_DATE = "stu_ls1_crs_date";
+
+    public static final String STU_LS2_DATE_ID = "stu_ls2_date_id";
+    public static final String STU_LS2_ATD_STS = "stu_ls2_atd_sts";
+
+    public static final String STU_MST_NAME = "atd_mst_name";
+    public static final String STU_MST_ID = "atd_mst_id";
+    public static final String STU_MST_GENDER = "atd_mst_gen";
+    public static final String STU_MST_CONTACT = "atd_mst_tel";
+    public static final String STU_MST_EMAIL = "atd_mst_email";
 
 
 
@@ -63,6 +77,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         db.execSQL(DATABASE_CREATE_CRS_MST);
         db.execSQL(DATABASE_CREATE_CRS_LS1);
+        db.execSQL(DATABASE_CREATE_CRS_LS2);
         db.execSQL(DATABASE_CREATE_ATD_LS1);
         db.execSQL(DATABASE_CREATE_ATD_LS2);
         db.execSQL(DATABASE_CREATE_ATD_MST);
@@ -95,9 +110,9 @@ public class UserDatabase extends SQLiteOpenHelper {
             + " ("
             + MST_ROWID
             + " integer NOT NULL,"
-            + ATD_LS1_CRS_ID
+            + STU_LS1_CRS_ID
             + " TEXT,"
-            + ATD_LS1_ATD_STS
+            + STU_LS1_ATD_STS
             + " TEXT,"
             + AUDIT_USER
             + " TEXT,"
@@ -106,16 +121,16 @@ public class UserDatabase extends SQLiteOpenHelper {
             + ROWID
             + " integer PRIMARY KEY autoincrement"
             + ","
-            + " UNIQUE (" + MST_ROWID + "," + ATD_LS1_CRS_ID + "));";
+            + " UNIQUE (" + MST_ROWID + "," + STU_LS1_CRS_ID + "));";
 
     private static final String DATABASE_CREATE_ATD_LS2 = "CREATE TABLE if not exists "
             + SQLITE_TABLE_ATTENDEES_ATTENDANCE
             + " ("
             + MST_ROWID
             + " integer NOT NULL,"
-            + ATD_LS2_DATE_ID
+            + STU_LS2_DATE_ID
             + " TEXT,"
-            + ATD_LS2_ATD_STS
+            + STU_LS2_ATD_STS
             + " TEXT,"
             + AUDIT_USER
             + " TEXT,"
@@ -124,7 +139,7 @@ public class UserDatabase extends SQLiteOpenHelper {
             + ROWID
             + " integer PRIMARY KEY autoincrement"
             + ","
-            + " UNIQUE (" + MST_ROWID + "," + ATD_LS2_DATE_ID + "));";
+            + " UNIQUE (" + MST_ROWID + "," + STU_LS2_DATE_ID + "));";
 
     private static final String DATABASE_CREATE_CRS_LS1 = "CREATE TABLE if not exists "
             + SQLITE_TABLE_COURSE_DATE
@@ -140,18 +155,52 @@ public class UserDatabase extends SQLiteOpenHelper {
             + ROWID
             + " integer PRIMARY KEY autoincrement)";
 
+    private static final String DATABASE_CREATE_CRS_LS2 = "CREATE TABLE if not exists "
+            + SQLITE_TABLE_COURSE_FEEDBACK
+            + " ("
+            + MST_ROWID
+            + " integer NOT NULL,"
+            + CRS_LS2_CRS_ID
+            + " TEXT,"
+            + CRS_LS2_STU_ID
+            + " TEXT,"
+            + CRS_LS2_ANS_1
+            + " TEXT,"
+            + CRS_LS2_ANS_2
+            + " TEXT,"
+            + CRS_LS2_ANS_3
+            + " TEXT,"
+            + CRS_LS2_ANS_4
+            + " TEXT,"
+            + CRS_LS2_ANS_5
+            + " TEXT,"
+            + CRS_LS2_ANS_6
+            + " TEXT,"
+            + CRS_LS2_ANS_7
+            + " TEXT,"
+            + CRS_LS2_ANS_8
+            + " TEXT,"
+            + CRS_LS2_ANS_9
+            + " TEXT,"
+            + AUDIT_USER
+            + " TEXT,"
+            + AUDIT_DATE
+            + " ,"
+            + ROWID
+            + " integer PRIMARY KEY autoincrement)";
+
     private static final String DATABASE_CREATE_ATD_MST = "CREATE TABLE if not exists "
             + SQLITE_TABLE_ATTENDEES
             + " ("
-            + ATD_MST_NAME
+            + STU_MST_NAME
             + " TEXT,"
-            + ATD_MST_ID
+            + STU_MST_ID
             + " TEXT,"
-            + ATD_MST_GENDER
+            + STU_MST_GENDER
             + " TEXT,"
-            + ATD_MST_CONTACT
+            + STU_MST_CONTACT
             + " TEXT,"
-            + ATD_MST_EMAIL
+            + STU_MST_EMAIL
             + " TEXT,"
             + AUDIT_USER
             + " TEXT,"
@@ -182,7 +231,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(MST_ROWID, attendeeID);
-        values.put(ATD_LS1_CRS_ID, courseID);
+        values.put(STU_LS1_CRS_ID, courseID);
         //values.put(ATD_LS1_ATD_STS, status);
         //values.put(ATD_LS1_CRS_DATE, courseDate);
         values.put(AUDIT_USER, "daryl");
@@ -196,7 +245,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
 
-        return db.delete(SQLITE_TABLE_ATTENDEES_COURSES, MST_ROWID + "=" + String.valueOf(rowID) + " AND " + ATD_LS1_CRS_ID + "=" + String.valueOf(courseID), null) > 0;
+        return db.delete(SQLITE_TABLE_ATTENDEES_COURSES, MST_ROWID + "=" + String.valueOf(rowID) + " AND " + STU_LS1_CRS_ID + "=" + String.valueOf(courseID), null) > 0;
 
     }
 
@@ -222,10 +271,10 @@ public class UserDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         //values.put(MST_ROWID, rowID);
-        values.put(ATD_MST_NAME, attendeeName);
-        values.put(ATD_MST_ID, attendeeID);
-        values.put(ATD_MST_EMAIL, attendeeEmail);
-        values.put(ATD_MST_CONTACT, attendeeContact);
+        values.put(STU_MST_NAME, attendeeName);
+        values.put(STU_MST_ID, attendeeID);
+        values.put(STU_MST_EMAIL, attendeeEmail);
+        values.put(STU_MST_CONTACT, attendeeContact);
         values.put(AUDIT_USER, "daryl");
         values.put(AUDIT_DATE, dateFormat.format(new java.util.Date()));
 
@@ -305,10 +354,10 @@ public class UserDatabase extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
 
-                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(ATD_MST_NAME)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_ID)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_EMAIL)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_CONTACT)),
+                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
                         cursor.getLong(cursor.getColumnIndex(ROWID))));
             } while (cursor.moveToNext());
         }
@@ -326,7 +375,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
         //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_ATTENDEES + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID);
-        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_ATTENDEES + ", " + SQLITE_TABLE_ATTENDEES_COURSES + " WHERE " + SQLITE_TABLE_ATTENDEES + "." + ROWID + "=" + SQLITE_TABLE_ATTENDEES_COURSES +"." + MST_ROWID + " AND " + ATD_LS1_CRS_ID + " = " + String.valueOf(courseID);
+        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_ATTENDEES + ", " + SQLITE_TABLE_ATTENDEES_COURSES + " WHERE " + SQLITE_TABLE_ATTENDEES + "." + ROWID + "=" + SQLITE_TABLE_ATTENDEES_COURSES +"." + MST_ROWID + " AND " + STU_LS1_CRS_ID + " = " + String.valueOf(courseID);
 
         Log.e("Select Query", selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -334,10 +383,10 @@ public class UserDatabase extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
 
-                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(ATD_MST_NAME)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_ID)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_EMAIL)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_CONTACT)),
+                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
                         cursor.getLong(cursor.getColumnIndex(ROWID))));
             } while (cursor.moveToNext());
         }
@@ -402,10 +451,10 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(ATD_MST_NAME)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_ID)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_EMAIL)),
-                        cursor.getString(cursor.getColumnIndex(ATD_MST_CONTACT)),
+                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
                         cursor.getLong(cursor.getColumnIndex(ROWID))));
             } while (cursor.moveToNext());
         }
@@ -421,9 +470,9 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         ContentValues initialValues = new ContentValues();
 
-        initialValues.put(ATD_MST_NAME, attendeeName);
-        initialValues.put(ATD_MST_EMAIL, attendeeEmail);
-        initialValues.put(ATD_MST_CONTACT, attendeeContact);
+        initialValues.put(STU_MST_NAME, attendeeName);
+        initialValues.put(STU_MST_EMAIL, attendeeEmail);
+        initialValues.put(STU_MST_CONTACT, attendeeContact);
 
         if (db.update(SQLITE_TABLE_ATTENDEES, initialValues, ROWID + " = " + String.valueOf(rowID), null) > 0){
             return true;

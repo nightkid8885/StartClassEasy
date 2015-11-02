@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,7 +16,7 @@ import android.widget.Toast;
 
 import com.cmms.codetech.startclasseasy.adapter.CourseAttendeeAdapter;
 
-public class AttendeeListActivity extends AppCompatActivity {
+public class StudentListActivity extends AppCompatActivity {
 
     EditText searchAttendeeEt;
     Button addNewAttendeeBtn;
@@ -32,7 +30,7 @@ public class AttendeeListActivity extends AppCompatActivity {
     CourseAttendeeAdapter attendeeAdapter;
     Bundle extras;
 
-    UserDatabase dbHelper = new UserDatabase(AttendeeListActivity.this);
+    UserDatabase dbHelper = new UserDatabase(StudentListActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         addNewAttendeeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AttendeeListActivity.this, AttendeeActivity.class);
+                Intent i = new Intent(StudentListActivity.this, StudentActivity.class);
 
                 i.putExtra("isEditMode", false);
                 //Log.e("AttendList Rowid", String.valueOf(extras.getLong("rowID")));
@@ -84,13 +82,12 @@ public class AttendeeListActivity extends AppCompatActivity {
         listViewLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(AttendeeListActivity.this, AttendeeActivity.class);
+                Intent i = new Intent(StudentListActivity.this, StudentActivity.class);
 
                 i.putExtra("isEditMode", true);
                 i.putExtra("rowID", dbHelper.listAllAttendees().get(position).getRowID());
 
                 startActivity(i);
-
 
             }
         });
@@ -106,7 +103,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         if (requestCode == mRequestCode101) {
             Log.e("DEBUG_TAG", String.valueOf(resultCode));
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(AttendeeListActivity.this, String.valueOf(data.getExtras().getBoolean("inserted")), Toast.LENGTH_LONG).show();
+                Toast.makeText(StudentListActivity.this, String.valueOf(data.getExtras().getBoolean("inserted")), Toast.LENGTH_LONG).show();
                 //attendeeAdapter.notifyDataSetChanged();
                 inflateAttendeeList();
             }

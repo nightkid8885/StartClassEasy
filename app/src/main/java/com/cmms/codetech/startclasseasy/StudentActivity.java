@@ -1,13 +1,9 @@
 package com.cmms.codetech.startclasseasy;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +13,7 @@ import com.cmms.codetech.startclasseasy.model.Attendee;
 
 import java.util.List;
 
-public class AttendeeActivity extends AppCompatActivity {
+public class StudentActivity extends AppCompatActivity {
 
     EditText nameEt;
     EditText emailEt;
@@ -25,7 +21,7 @@ public class AttendeeActivity extends AppCompatActivity {
     EditText contactNumberEt;
     Button submitBtn;
 
-    UserDatabase dbHelper = new UserDatabase(AttendeeActivity.this);
+    UserDatabase dbHelper = new UserDatabase(StudentActivity.this);
     Integer requestcode;
     Boolean updated;
     Boolean inserted;
