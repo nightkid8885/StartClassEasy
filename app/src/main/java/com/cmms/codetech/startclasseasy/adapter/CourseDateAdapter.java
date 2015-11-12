@@ -65,7 +65,7 @@ public class CourseDateAdapter  extends ArrayAdapter<CourseDate> {
         if (convertView == null) {
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.activity_course_row_date, null);
+            v = inflater.inflate(R.layout.activity_course_row_date, parent, false);
 
             TextView courseDate = (TextView) v.findViewById(R.id.acrd_courseDateTimeTv);
             ImageView minus = (ImageView) v.findViewById(R.id.acrd_removeDateTimeIv);

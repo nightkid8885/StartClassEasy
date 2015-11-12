@@ -9,6 +9,7 @@ public class Attendee {
     String attendeeEmail;
     String attendeeContact;
     Long rowID;
+    Long checked;
 
     public Attendee(String attendeeName, String attendeeID, String attendeeEmail, String attendeeContact, Long rowID) {
         super();
@@ -17,6 +18,16 @@ public class Attendee {
         this.attendeeEmail = attendeeEmail;
         this.attendeeContact = attendeeContact;
         this.rowID = rowID;
+    }
+
+    public Attendee(String attendeeName, String attendeeID, String attendeeEmail, String attendeeContact, Long rowID, Long checked) {
+        super();
+        this.attendeeName = attendeeName;
+        this.attendeeID = attendeeID;
+        this.attendeeEmail = attendeeEmail;
+        this.attendeeContact = attendeeContact;
+        this.rowID = rowID;
+        this.checked = checked;
     }
 
     public String getAttendeeName() {
@@ -57,5 +68,13 @@ public class Attendee {
 
     public void setRowID(Long rowID) {
         this.rowID = rowID;
+    }
+
+    public Long getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Long checked) {
+        this.checked = checked;
     }
 }

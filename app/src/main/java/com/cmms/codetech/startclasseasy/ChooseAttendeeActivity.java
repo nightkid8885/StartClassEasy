@@ -1,7 +1,11 @@
 package com.cmms.codetech.startclasseasy;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +22,9 @@ import android.widget.Toast;
 import com.cmms.codetech.startclasseasy.adapter.CourseChooseAttendeeAdapter;
 import com.cmms.codetech.startclasseasy.model.Attendee;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,6 +46,10 @@ public class ChooseAttendeeActivity extends Activity {
     List<Attendee> attendees = new ArrayList<Attendee>();
     private int mRequestCode101 = 101;
     Bundle extras;
+    Long courseID;
+
+
+    final static String TAG = "ChooseAttendeeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +59,9 @@ public class ChooseAttendeeActivity extends Activity {
         initView();
         extras = getIntent().getExtras();
 
-        inflateStudent();
+        courseID = extras.getLong("courseID");
+
+        inflateStudent(courseID);
 
         chooseAttendeeLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -57,112 +69,112 @@ public class ChooseAttendeeActivity extends Activity {
                 SparseBooleanArray checked = chooseAttendeeLv.getCheckedItemPositions();
 
                 //selectedItems.add(adapter.getItem(position));
-                Log.e("Position Item", adapter.getItem(position));
-                Log.e("Boolean", String.valueOf(selectedItems.contains(adapter.getItem(position))));
+
+                //Log.e("Boolean", String.valueOf(selectedItems.contains(adapter.getItem(position))));
+                Log.e("position", String.valueOf(position));
 
                 if (!selectedItems.contains(adapter.getItem(position))) {
                     selectedItems.add(adapter.getItem(position));
-                    selectedItemsRowID.add(attendees.get(position).getRowID());
+                    //selectedItemsRowID.add(attendees.get(position).getRowID());
 
-                    dbHelper.addCourseAttendee(attendees.get(position).getRowID(), extras.getLong("courseID"));
+                    if (dbHelper.addCourseAttendee(attendees.get(position).getRowID(), extras.getLong("courseID"))){
+                        dbHelper.addCourseAttendeeFeedback(attendees.get(position).getRowID(), extras.getLong("courseID"));
+                    }
 
                 } else {
                     for (int i = 0; i < selectedItems.size(); i++) {
                         if (selectedItems.get(i) == adapter.getItem(position)) {
                             selectedItems.remove(i);
-                            selectedItemsRowID.remove(i);
+                            //selectedItemsRowID.remove(i);
 
-                            dbHelper.deleteCourseAttendee(attendees.get(position).getRowID(),extras.getLong("courseID"));
-
+                            if (dbHelper.deleteCourseAttendee(attendees.get(position).getRowID(),extras.getLong("courseID"))){
+                                dbHelper.deleteCourseAttendeeFeedback(attendees.get(position).getRowID(), extras.getLong("courseID"));
+                            }
                         }
                     }
                 }
             }
-
         });
 
-        searchAttendee.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                System.out
-//                        .println("Text [" + s + "] - Start [" + start
-//                                + "] - Before [" + before + "] - Count ["
-//                                + count + "]");
-//                if (count < before) {
-//                    // We're deleting char so we need to reset the adapter data
-//                    //courseChooseAttendeeAdapter.resetData();
-//                    courseChooseAttendeeAdapter.resetData();
-//                }
+        searchAttendee.addTextChangedListener(textWatcher);
 
-                //courseChooseAttendeeAdapter.getFilter().filter(s.toString());
-                adapter.getFilter().filter(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(ChooseAttendeeActivity.this, StudentActivity.class);
-
-                i.putExtra("isEditMode", false);
-
-                startActivityForResult(i, mRequestCode101);
-
-//                int len = chooseAttendeeLv.getCount();
-//                Log.e("Len", String.valueOf(len));
-//                SparseBooleanArray checked = chooseAttendeeLv.getCheckedItemPositions();
-//                for (int i = 0; i < len; i++)
-//                    if (checked.valueAt(i)) {
-//                        Log.e("Name", attendees.get(i).getAttendeeName());
-//                    }
-//                for (int i = 0; i < selectedItems.size(); i++) {
-//                    Log.e("Name", selectedItems.get(i));
-//                    Log.e("RowID", String.valueOf(selectedItemsRowID.get(i)));
-//                }
-            }
-        });
+        addBtn.setOnClickListener(addStudent);
 
     }
 
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            adapter.getFilter().filter(s.toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    View.OnClickListener addStudent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(ChooseAttendeeActivity.this, StudentActivity.class);
+
+            i.putExtra("isEditMode", false);
+
+            startActivityForResult(i, mRequestCode101);
+
+        }
+    };
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == mRequestCode101) {
             Log.e("DEBUG_TAG", String.valueOf(resultCode));
             if (resultCode == Activity.RESULT_OK) {
                 //Toast.makeText(StudentListActivity.this, String.valueOf(data.getExtras().getBoolean("inserted")), Toast.LENGTH_LONG).show();
                 //attendeeAdapter.notifyDataSetChanged();
-                inflateStudent();
+                inflateStudent(courseID);
             }
         }
     }
 
-    private void inflateStudent() {
-        attendees = dbHelper.listAllAttendees();
+    private void inflateStudent(Long courseID) {
+        attendees = dbHelper.listAllStudentsByCourse(courseID);
 
         String[] attendeesList = new String[attendees.size()];
-        Long[] rowIDtoInsert = new Long[attendees.size()];
+        Boolean[] attendeesListChecked = new Boolean[attendees.size()];
 
         for (int i = 0; i < attendees.size(); i++) {
             attendeesList[i] = attendees.get(i).getAttendeeName() + " (" + attendees.get(i).getAttendeeContact() + ") ";
-            rowIDtoInsert[i] = attendees.get(i).getRowID();
+            if (attendees.get(i).getChecked()==1){
+                attendeesListChecked[i] = true;
+            }else{
+                attendeesListChecked[i] = false;
+            }
         }
+
+        //courseChooseAttendeeAdapter = new CourseChooseAttendeeAdapter(this, attendees);
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, attendeesList);
         chooseAttendeeLv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         chooseAttendeeLv.setAdapter(adapter);
+
+        for (int i = 0; i < attendees.size(); i++){
+            chooseAttendeeLv.setItemChecked(i, attendeesListChecked[i]);
+            if (attendeesListChecked[i]){
+                selectedItems.add(adapter.getItem(i));
+            }
+        }
+
     }
 
     private void initView() {

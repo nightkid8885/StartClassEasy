@@ -53,10 +53,12 @@ public class MenuActivity extends ListActivity {
             switch (position) {
                 case 0:
                     Toast.makeText(getApplicationContext(), "Calendar", Toast.LENGTH_SHORT).show();
+                    Intent iCalendar = new Intent(getApplicationContext(), StudentCourseListActivity.class);
+                    startActivity(iCalendar);
                     break;
                 case 1:
                     Toast.makeText(getApplicationContext(), "Feedback", Toast.LENGTH_SHORT).show();
-                    Intent iFeedback = new Intent(getApplicationContext(), FeedbackActivity.class);
+                    Intent iFeedback = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
                     startActivity(iFeedback);
                     break;
                 case 2:

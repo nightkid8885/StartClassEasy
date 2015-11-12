@@ -29,6 +29,13 @@ public class MainActivity extends AppCompatActivity{
 
         db = new UserDatabase(this);
 
+
+        db.addAttendee("Daryl Lee", "1", "onnchai85@gmail.com", "0122690122");
+        db.addAttendee("Estelle", "2", "estelle@gmail.com", "0122323133");
+        db.addAttendee("Esther", "3", "esther@gmail.com", "012121212");
+        db.addAttendee("Jacky", "4", "jacky@gmail.com", "0181238283");
+
+
     }
 
 

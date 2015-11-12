@@ -85,7 +85,7 @@ public class StudentListActivity extends AppCompatActivity {
                 Intent i = new Intent(StudentListActivity.this, StudentActivity.class);
 
                 i.putExtra("isEditMode", true);
-                i.putExtra("rowID", dbHelper.listAllAttendees().get(position).getRowID());
+                i.putExtra("rowID", dbHelper.listAllStudents().get(position).getRowID());
 
                 startActivity(i);
 
@@ -120,7 +120,7 @@ public class StudentListActivity extends AppCompatActivity {
 
 
     public void inflateAttendeeList() {
-        attendeeAdapter = new CourseAttendeeAdapter(this, dbHelper.listAllAttendees());
+        attendeeAdapter = new CourseAttendeeAdapter(this, dbHelper.listAllStudents());
         listViewLv.setAdapter(attendeeAdapter);
     }
 
