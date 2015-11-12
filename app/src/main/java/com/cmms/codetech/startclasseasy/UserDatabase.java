@@ -8,6 +8,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 
 import com.cmms.codetech.startclasseasy.model.Attendee;
 import com.cmms.codetech.startclasseasy.model.Course;
@@ -631,6 +634,33 @@ public class UserDatabase extends SQLiteOpenHelper {
         initialValues.put(STU_MST_CONTACT, attendeeContact);
 
         if (db.update(SQLITE_TABLE_STUDENT, initialValues, ROWID + " = " + String.valueOf(rowID), null) > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public boolean updateAttendeeFeedback(Long courseID, String rememberKeyPtsRb, String understandReexplainRb,
+                                          String confidentTransferRb, String instructorPreparedRb, String instructorDeliveryRb, String instructorEngagementRb,
+                                          String workedWellFeedback, String improvementFeedback, String overallFeedback) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(CRS_LS2_ANS_1, rememberKeyPtsRb);
+        initialValues.put(CRS_LS2_ANS_2, understandReexplainRb);
+        initialValues.put(CRS_LS2_ANS_3, confidentTransferRb);
+        initialValues.put(CRS_LS2_ANS_4, instructorPreparedRb);
+        initialValues.put(CRS_LS2_ANS_5, instructorDeliveryRb);
+        initialValues.put(CRS_LS2_ANS_6, instructorEngagementRb);
+        initialValues.put(CRS_LS2_ANS_7, workedWellFeedback);
+        initialValues.put(CRS_LS2_ANS_8, improvementFeedback);
+        initialValues.put(CRS_LS2_ANS_9, overallFeedback);
+
+//        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = " + String.valueOf(stuID) + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
+        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = 1" + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
             return true;
         }else{
             return false;
