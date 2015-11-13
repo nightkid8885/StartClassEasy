@@ -129,12 +129,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
                     Intent i = new Intent();
 
-                    inserted = dbHelper.updateAttendeeFeedback(courseID, String.valueOf(rememberKeyPtsRb.getRating()), String.valueOf(understandReexplainRb.getRating()), String.valueOf(confidentTransferRb.getRating()), String.valueOf(instructorPreparedRb.getRating()), String.valueOf(instructorDeliveryRb.getRating()), String.valueOf(instructorEngagementRb.getRating()), String.valueOf(workedWellFeedback.getText()), String.valueOf(improvementFeedback.getText()), String.valueOf(overallFeedback.getText()));
+                    inserted = dbHelper.updateAttendeeFeedback(courseID, String.valueOf(rememberKeyPtsRb.getRating()), String.valueOf(understandReexplainRb.getRating()), String.valueOf(confidentTransferRb.getRating()), String.valueOf(instructorPreparedRb.getRating()), String.valueOf(instructorDeliveryRb.getRating()), String.valueOf(instructorEngagementRb.getRating()), String.valueOf(workedWellFeedback.getText()), String.valueOf(improvementFeedback.getText()), String.valueOf(overallFeedback.getText()), "True");
 
                     if(inserted){
                         i.putExtra("inserted", inserted);
                         setResult(Activity.RESULT_OK, i);
                         finish();
+                        Toast.makeText(getApplicationContext(), "Successful", Toast.LENGTH_LONG).show();
                     }else{
                         Toast.makeText(getApplicationContext(), "Insert Course Attendee Failed", Toast.LENGTH_LONG).show();
                     }

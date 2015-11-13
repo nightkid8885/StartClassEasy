@@ -59,7 +59,7 @@ public class FeedbackCourseListActivity extends AppCompatActivity {
     }
 
     public void inflateCourseList() {
-        courseAdapter = new CourseAdapter(this, dbHelper.listStudentAllCourse());
+        courseAdapter = new CourseAdapter(this, dbHelper.listStudentFeedbackAllCourse());
         listViewLv.setAdapter(courseAdapter);
     }
 

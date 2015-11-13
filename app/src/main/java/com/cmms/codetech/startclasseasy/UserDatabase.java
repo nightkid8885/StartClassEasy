@@ -59,6 +59,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static final String CRS_LS2_ANS_7 = "crs_ls2_ans_7";
     public static final String CRS_LS2_ANS_8 = "crs_ls2_ans_8";
     public static final String CRS_LS2_ANS_9 = "crs_ls2_ans_9";
+    public static final String CRS_LS2_STATUS = "crs_ls2_status";
 
     public static final String STU_LS1_CRS_ID = "stu_ls1_atd_course";
     public static final String STU_LS1_ATD_STS = "stu_ls1_atd_sts";
@@ -193,6 +194,8 @@ public class UserDatabase extends SQLiteOpenHelper {
             + CRS_LS2_ANS_8
             + " TEXT,"
             + CRS_LS2_ANS_9
+            + " TEXT,"
+            + CRS_LS2_STATUS
             + " TEXT,"
             + AUDIT_USER
             + " TEXT,"
@@ -343,7 +346,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 list.add(new CourseDate(cursor.getString(cursor.getColumnIndex(CRS_LS1_CRS_DATE)),
-                                        cursor.getLong(cursor.getColumnIndex(ROWID))));
+                        cursor.getLong(cursor.getColumnIndex(ROWID))));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -366,9 +369,9 @@ public class UserDatabase extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 list.add(new Course(cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_NAME)),
-                                    cursor.getString(cursor.getColumnIndex(CRS_MST_CON_NAME)),
-                                    cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
-                                    cursor.getLong(cursor.getColumnIndex(ROWID))));
+                        cursor.getString(cursor.getColumnIndex(CRS_MST_CON_NAME)),
+                        cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
+                        cursor.getLong(cursor.getColumnIndex(ROWID))));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -467,7 +470,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
                         cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
                         cursor.getLong(4),
-                                cursor.getLong(5)));
+                        cursor.getLong(5)));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -641,9 +644,10 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    //Update Feedback form
     public boolean updateAttendeeFeedback(Long courseID, String rememberKeyPtsRb, String understandReexplainRb,
                                           String confidentTransferRb, String instructorPreparedRb, String instructorDeliveryRb, String instructorEngagementRb,
-                                          String workedWellFeedback, String improvementFeedback, String overallFeedback) {
+                                          String workedWellFeedback, String improvementFeedback, String overallFeedback, String status) {
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -658,15 +662,53 @@ public class UserDatabase extends SQLiteOpenHelper {
         initialValues.put(CRS_LS2_ANS_7, workedWellFeedback);
         initialValues.put(CRS_LS2_ANS_8, improvementFeedback);
         initialValues.put(CRS_LS2_ANS_9, overallFeedback);
+        initialValues.put(CRS_LS2_STATUS, status);
 
-//        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = " + String.valueOf(stuID) + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
-        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = 1" + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
-            return true;
-        }else{
+        Log.e("Select feedback", "SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ");
+        Log.e("Select feedback count", String.valueOf(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount()));
+        if(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount() == 0) {
+        //        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = " + String.valueOf(stuID) + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
+            if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = 1" + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0) {
+
+                return true;
+            } else {
+
+                return false;
+            }
+        } else {
             return false;
         }
 
     }
+
+    //To prevent user from doing the same feedback again - user can only do once
+    public List<Course> listStudentFeedbackAllCourse(){
+        List<Course> list = new ArrayList<Course>();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
+        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE + "," + SQLITE_TABLE_STUDENT_COURSES + "," + SQLITE_TABLE_COURSE_FEEDBACK
+                + " WHERE " + SQLITE_TABLE_COURSE + "." + ROWID + "=" + SQLITE_TABLE_STUDENT_COURSES+ "." + MST_ROWID
+                + " AND " + SQLITE_TABLE_STUDENT_COURSES + "." + MST_ROWID + "=1" + " AND " + SQLITE_TABLE_COURSE_FEEDBACK + "." + CRS_LS2_STATUS + " is NULL ";
+
+        Log.e("Select Query", selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new Course(cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_NAME)),
+                        cursor.getString(cursor.getColumnIndex(CRS_MST_CON_NAME)),
+                        cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
+                        cursor.getLong(cursor.getColumnIndex(ROWID))));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        Log.e("Check Size", String.valueOf(list.size()));
+
+        return list;
+    };
 
     //INSERT INTO STU_LS2
     public boolean addCourseAttendance(Long dateID, Long courseID, Long stuID) {
