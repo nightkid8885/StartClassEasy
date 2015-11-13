@@ -405,13 +405,14 @@ public class UserDatabase extends SQLiteOpenHelper {
     };
 
     //Calendar Module List All Date By Course
-    public List<Course> listStudentCourseCalendar(Long courseID){
-        List<Course> list = new ArrayList<Course>();
+    public List<CourseDate> listStudentCourseCalendar(Long courseID){
+        List<CourseDate> list = new ArrayList<CourseDate>();
 
         SQLiteDatabase db = getWritableDatabase();
 
         //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
-        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE + "," + SQLITE_TABLE_COURSE_DATE
+        String selectQuery = "SELECT " + SQLITE_TABLE_COURSE_DATE + "." + CRS_LS1_CRS_DATE + "," + SQLITE_TABLE_COURSE_DATE + "." + ROWID
+                + " FROM " + SQLITE_TABLE_COURSE + "," + SQLITE_TABLE_COURSE_DATE
                 + " WHERE " + SQLITE_TABLE_COURSE + "." + ROWID + "=" + SQLITE_TABLE_COURSE_DATE+ "." + MST_ROWID
                 + " AND " + SQLITE_TABLE_COURSE + "." + ROWID + "=" + String.valueOf(courseID);
 
@@ -420,10 +421,8 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                list.add(new Course(cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_NAME)),
-                        cursor.getString(cursor.getColumnIndex(CRS_MST_CON_NAME)),
-                        cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
-                        cursor.getLong(cursor.getColumnIndex(ROWID))));
+                list.add(new CourseDate(cursor.getString(0),
+                        cursor.getLong(1)));
             } while (cursor.moveToNext());
         }
         cursor.close();
