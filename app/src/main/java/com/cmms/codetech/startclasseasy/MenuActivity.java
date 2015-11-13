@@ -58,7 +58,7 @@ public class MenuActivity extends ListActivity {
                     break;
                 case 1:
                     Toast.makeText(getApplicationContext(), "Feedback", Toast.LENGTH_SHORT).show();
-                    Intent iFeedback = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
+                    Intent iFeedback = new Intent(getApplicationContext(), FeedbackCourseListActivity.class);
                     startActivity(iFeedback);
                     break;
                 case 2:
