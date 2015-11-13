@@ -34,11 +34,11 @@ public class CourseDateAdapter  extends ArrayAdapter<CourseDate> {
 
 
     public CourseDateAdapter(Context ctx, List<CourseDate> courseDateList, Long courseID, Boolean isEditMode) {
-        super(ctx, R.layout.activity_course_row_date, courseDateList);
-        this.courseDateList = courseDateList;
-        this.context = ctx;
-        this.course_rowID = courseID;
-        this.isEditMode = isEditMode;
+            super(ctx, R.layout.activity_course_row_date, courseDateList);
+            this.courseDateList = courseDateList;
+            this.context = ctx;
+            this.course_rowID = courseID;
+            this.isEditMode = isEditMode;
 
     }
 

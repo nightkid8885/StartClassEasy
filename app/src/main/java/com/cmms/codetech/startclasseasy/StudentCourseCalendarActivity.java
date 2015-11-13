@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.cmms.codetech.startclasseasy.adapter.CourseAdapter;
+import com.cmms.codetech.startclasseasy.adapter.CourseDateAdapter;
 
 /**
  * Created by daryl on 12/11/2015.
@@ -13,7 +13,7 @@ import com.cmms.codetech.startclasseasy.adapter.CourseAdapter;
 public class StudentCourseCalendarActivity extends Activity {
     ListView courseDateLv;
 
-    CourseAdapter courseAdapter;
+    CourseDateAdapter courseDateAdapter;
     UserDatabase dbHelper = new UserDatabase(StudentCourseCalendarActivity.this);
 
     Bundle extras;
@@ -38,8 +38,8 @@ public class StudentCourseCalendarActivity extends Activity {
     }
 
     public void inflateCourseCalendarList(Long courseID) {
-        courseAdapter = new CourseAdapter(this, dbHelper.listStudentCourseCalendar(courseID));
-        courseDateLv.setAdapter(courseAdapter);
+        courseDateAdapter = new CourseDateAdapter(this, dbHelper.listStudentCourseCalendar(courseID), courseID, false);
+        courseDateLv.setAdapter(courseDateAdapter);
     }
 
 
