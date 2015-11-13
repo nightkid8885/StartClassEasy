@@ -122,11 +122,11 @@ public class CourseActivity extends AppCompatActivity {
                 i.putExtra("isEditMode", false);
 
                 if (isEditMode){
-                    i.putExtra("rowID", courseDateList.get(position).getRowID());
+                    i.putExtra("dateID", courseDateList.get(position).getRowID());
                     i.putExtra("courseDate", courseDateList.get(position).getCourseDate());
                     i.putExtra("courseID", extras.getLong("rowID"));
                 }else{
-                    i.putExtra("rowID", courseDateList.get(position).getRowID());
+                    i.putExtra("dateID", courseDateList.get(position).getRowID());
                     i.putExtra("courseDate", courseDateList.get(position).getCourseDate());
                     i.putExtra("courseID", courseID);
                 }

@@ -38,14 +38,7 @@ public class CourseChooseAttendeeAdapter extends ArrayAdapter<Attendee> implemen
         this.attendeeList = attendeeList;
         this.origAttendeeList = attendeeList;
 
-        for (int i = 0; i < this.getCount(); i++) {
-            Log.e("count variable", String.valueOf(i));
-            itemChecked.add(i, false); // initializes all items value with false
-        }
     }
-
-
-
 
     @Override
     public int getCount() {
@@ -78,6 +71,7 @@ public class CourseChooseAttendeeAdapter extends ArrayAdapter<Attendee> implemen
             TextView attendeeName = (TextView) v.findViewById(R.id.acalr_attendeeNameTv);
             CheckBox checkBox = (CheckBox) v.findViewById(R.id.acalr_attendeeNameCb);
 
+
             checkBox.setTag(position);
             holder.attendeeName = attendeeName;
             holder.checkBox = checkBox;
@@ -91,23 +85,30 @@ public class CourseChooseAttendeeAdapter extends ArrayAdapter<Attendee> implemen
         Log.e("Check CheckBox", String.valueOf(attendeeList.size()));
         Attendee p = attendeeList.get(position);
         holder.attendeeName.setText(p.getAttendeeName());
-        holder.checkBox.setOnClickListener(check);
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isChecked()) {
-                    itemChecked.set(position, true);
-                    Log.e("check change 1", String.valueOf(position));
-                } else if (!buttonView.isChecked()) {
-                    itemChecked.set(position, false);
-                    Log.e("check change 2", String.valueOf(position));
-                }
-            }
-        });
+        if (attendeeList.get(position).getChecked() == 1){
+            holder.checkBox.setChecked(true);
+        }else{
+            holder.checkBox.setChecked(false);
+        }
 
-        holder.checkBox.setChecked(itemChecked.get(position));
-        Log.e("check boolean", String.valueOf(itemChecked.get(position)));
+//        holder.checkBox.setOnClickListener(check);
+//
+//        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (buttonView.isChecked()) {
+//                    itemChecked.set(position, true);
+//                    Log.e("check change 1", String.valueOf(position));
+//                } else if (!buttonView.isChecked()) {
+//                    itemChecked.set(position, false);
+//                    Log.e("check change 2", String.valueOf(position));
+//                }
+//            }
+//        });
+//
+//        holder.checkBox.setChecked(itemChecked.get(position));
+//        Log.e("check boolean", String.valueOf(itemChecked.get(position)));
 
         return v;
     }
