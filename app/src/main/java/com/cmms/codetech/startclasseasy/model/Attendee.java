@@ -9,7 +9,13 @@ public class Attendee {
     String attendeeEmail;
     String attendeeContact;
     Long rowID;
-    Long checked;
+    int checked;
+    Boolean selected;
+
+    public Attendee(Long rowID) {
+        super();
+        this.rowID = rowID;
+    }
 
     public Attendee(String attendeeName, String attendeeID, String attendeeEmail, String attendeeContact, Long rowID) {
         super();
@@ -20,7 +26,17 @@ public class Attendee {
         this.rowID = rowID;
     }
 
-    public Attendee(String attendeeName, String attendeeID, String attendeeEmail, String attendeeContact, Long rowID, Long checked) {
+    public Attendee(String attendeeName, String attendeeID, String attendeeEmail, String attendeeContact, Long rowID, Boolean selected) {
+        super();
+        this.attendeeName = attendeeName;
+        this.attendeeID = attendeeID;
+        this.attendeeEmail = attendeeEmail;
+        this.attendeeContact = attendeeContact;
+        this.rowID = rowID;
+        this.selected = selected;
+    }
+
+    public Attendee(String attendeeName, String attendeeID, String attendeeEmail, String attendeeContact, Long rowID, int checked) {
         super();
         this.attendeeName = attendeeName;
         this.attendeeID = attendeeID;
@@ -29,6 +45,8 @@ public class Attendee {
         this.rowID = rowID;
         this.checked = checked;
     }
+
+
 
     public String getAttendeeName() {
         return attendeeName;
@@ -70,11 +88,19 @@ public class Attendee {
         this.rowID = rowID;
     }
 
-    public Long getChecked() {
+    public int getChecked() {
         return checked;
     }
 
-    public void setChecked(Long checked) {
+    public void setChecked(int checked) {
         this.checked = checked;
+    }
+
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
     }
 }

@@ -42,7 +42,6 @@ public class StudentCourseCalendarActivity extends Activity {
         courseDateLv.setAdapter(courseDateAdapter);
     }
 
-
     private void initView() {
 
         courseDateLv = (ListView) findViewById(R.id.acc_courseDateLv);

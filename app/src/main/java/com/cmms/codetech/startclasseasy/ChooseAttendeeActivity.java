@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,7 +33,7 @@ import java.util.List;
 /**
  * Created by daryl on 29/10/2015.
  */
-public class ChooseAttendeeActivity extends Activity {
+public class ChooseAttendeeActivity extends AppCompatActivity {
 
     ListView chooseAttendeeLv;
     EditText searchAttendee;
@@ -63,6 +66,9 @@ public class ChooseAttendeeActivity extends Activity {
 
         inflateStudent(courseID);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         chooseAttendeeLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,6 +78,7 @@ public class ChooseAttendeeActivity extends Activity {
 
                 //Log.e("Boolean", String.valueOf(selectedItems.contains(adapter.getItem(position))));
                 Log.e("position", String.valueOf(position));
+                Log.e(TAG, "check click2");
 
                 if (!selectedItems.contains(adapter.getItem(position))) {
                     selectedItems.add(adapter.getItem(position));
@@ -87,8 +94,15 @@ public class ChooseAttendeeActivity extends Activity {
                             selectedItems.remove(i);
                             //selectedItemsRowID.remove(i);
 
-                            if (dbHelper.deleteCourseAttendee(attendees.get(position).getRowID(),extras.getLong("courseID"))){
-                                dbHelper.deleteCourseAttendeeFeedback(attendees.get(position).getRowID(), extras.getLong("courseID"));
+                            //if stu_ls2 having record it should not delete
+                            Log.e(TAG, String.valueOf(dbHelper.checkIfAttended(attendees.get(position).getRowID(), extras.getLong("courseID" )).size()));
+
+                            if (dbHelper.checkIfAttended(attendees.get(position).getRowID(),extras.getLong("courseID")).size() == 0){
+                                if (dbHelper.deleteCourseAttendee(attendees.get(position).getRowID(),extras.getLong("courseID"))){
+                                    dbHelper.deleteCourseAttendeeFeedback(attendees.get(position).getRowID(), extras.getLong("courseID"));
+                                }
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Already have attendance, cannot remove student from course" , Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -96,30 +110,28 @@ public class ChooseAttendeeActivity extends Activity {
             }
         });
 
+        //searchAttendee.addTextChangedListener(textWatcher);
 
-
-        searchAttendee.addTextChangedListener(textWatcher);
-
-        addBtn.setOnClickListener(addStudent);
+        //addBtn.setOnClickListener(addStudent);
 
     }
 
-    TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            adapter.getFilter().filter(s.toString());
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
+//    TextWatcher textWatcher = new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            adapter.getFilter().filter(s.toString());
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable s) {
+//
+//        }
+//    };
 
     View.OnClickListener addStudent = new View.OnClickListener() {
         @Override
@@ -147,7 +159,7 @@ public class ChooseAttendeeActivity extends Activity {
         }
     }
 
-    private void inflateStudent(Long courseID) {
+    public void inflateStudent(Long courseID) {
         attendees = dbHelper.listAllStudentsByCourse(courseID);
 
         String[] attendeesList = new String[attendees.size()];
@@ -162,26 +174,52 @@ public class ChooseAttendeeActivity extends Activity {
             }
         }
 
-        //courseChooseAttendeeAdapter = new CourseChooseAttendeeAdapter(this, attendees);
+        courseChooseAttendeeAdapter = new CourseChooseAttendeeAdapter(this, R.layout.activity_attendance_list, attendees, extras.getLong("courseID" ));
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, attendeesList);
+        //adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, attendeesList);
         chooseAttendeeLv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        chooseAttendeeLv.setAdapter(adapter);
+        chooseAttendeeLv.setAdapter(courseChooseAttendeeAdapter);
 
+        //Load true false to checkbox
         for (int i = 0; i < attendees.size(); i++){
             chooseAttendeeLv.setItemChecked(i, attendeesListChecked[i]);
+
             if (attendeesListChecked[i]){
                 selectedItems.add(adapter.getItem(i));
             }
         }
-
     }
 
     private void initView() {
 
-        searchAttendee = (EditText) findViewById(R.id.acal_searchChooseAttendeeEt);
-        addBtn = (Button) findViewById(R.id.acal_addBtn);
         chooseAttendeeLv = (ListView) findViewById(R.id.acal_chooseAttendeeLv);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_attendee, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+
+        switch (item.getItemId()) {
+            case R.id.addStudent:
+
+                Toast.makeText(this, "ADD", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(ChooseAttendeeActivity.this, StudentActivity.class);
+
+                i.putExtra("isEditMode", false);
+
+                startActivityForResult(i, mRequestCode101);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

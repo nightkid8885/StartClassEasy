@@ -9,34 +9,6 @@
     android:orientation="vertical"
     tools:context="com.cmms.codetech.startclasseasy.CourseListActivity">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/acal_searchChooseAttendeeEt"
-            android:hint="Search Attendee"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerVertical="true"
-            android:singleLine="true"
-            android:layout_toStartOf="@+id/acal_addBtn"
-            android:layout_toLeftOf="@+id/acal_addBtn" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add"
-            android:layout_alignBottom="@+id/acal_searchChooseAttendeeEt"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/acal_addBtn" />
-
-    </RelativeLayout>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
