@@ -665,18 +665,18 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         Log.e("Select feedback", "SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ");
         Log.e("Select feedback count", String.valueOf(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount()));
-        if(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount() == 0) {
+//        if(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount() == 0) {
         //        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = " + String.valueOf(stuID) + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
-            if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = 1" + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0) {
+            if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = 1" + " AND " + MST_ROWID + "= " + String.valueOf(courseID), null) > 0) {
 
                 return true;
             } else {
 
                 return false;
             }
-        } else {
-            return false;
-        }
+//        } else {
+//            return false;
+//        }
 
     }
 
@@ -687,19 +687,24 @@ public class UserDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
-        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE + "," + SQLITE_TABLE_STUDENT_COURSES + "," + SQLITE_TABLE_COURSE_FEEDBACK
-                + " WHERE " + SQLITE_TABLE_COURSE + "." + ROWID + "=" + SQLITE_TABLE_STUDENT_COURSES+ "." + MST_ROWID
-                + " AND " + SQLITE_TABLE_STUDENT_COURSES + "." + MST_ROWID + "=1" + " AND " + SQLITE_TABLE_COURSE_FEEDBACK + "." + CRS_LS2_STATUS + " is NULL ";
+        String selectQuery = "SELECT " + SQLITE_TABLE_COURSE + "." + ROWID + " as rowid, " + SQLITE_TABLE_COURSE + "." + CRS_MST_CRS_NAME + ", " + SQLITE_TABLE_COURSE + "." + CRS_MST_CON_NAME + ", " + SQLITE_TABLE_COURSE + "." + CRS_MST_CRS_STS + " FROM " + SQLITE_TABLE_COURSE + " INNER JOIN " + SQLITE_TABLE_COURSE_FEEDBACK + " ON " + SQLITE_TABLE_COURSE + "." + ROWID + " = "
+                + SQLITE_TABLE_COURSE_FEEDBACK + "." + MST_ROWID + " INNER JOIN " + SQLITE_TABLE_STUDENT + " ON " + SQLITE_TABLE_COURSE_FEEDBACK + "." + CRS_LS2_STU_ID + " = "
+                + SQLITE_TABLE_STUDENT + "." + ROWID + " WHERE " + SQLITE_TABLE_COURSE_FEEDBACK + "." + CRS_LS2_STATUS + " is NULL AND " + SQLITE_TABLE_STUDENT + "." + ROWID + " = 1";
 
-        Log.e("Select Query", selectQuery);
+        Log.e("Select Feedback Query", selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
+
+
 
         if (cursor.moveToFirst()) {
             do {
-                list.add(new Course(cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_NAME)),
+                Course c = new Course(cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_NAME)),
                         cursor.getString(cursor.getColumnIndex(CRS_MST_CON_NAME)),
                         cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
-                        cursor.getLong(cursor.getColumnIndex(ROWID))));
+                        cursor.getLong(cursor.getColumnIndex(ROWID)));
+                list.add(c);
+                Log.e("list", "list: " + list);
+                Log.e("DDDD", "DD: " + c.getRowID() + " " + c.getCourseName() + " " + c.getCourseStatus() + " " + c.getCourseTrainer());
             } while (cursor.moveToNext());
         }
         cursor.close();

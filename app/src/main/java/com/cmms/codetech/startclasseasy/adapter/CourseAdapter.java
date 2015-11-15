@@ -56,6 +56,7 @@ public class CourseAdapter extends ArrayAdapter<Course> implements Filterable{
     public long getItemId(int position) {
         // TODO Auto-generated method stub
         return courseList.get(position).hashCode();
+        //return courseList.get(position).getRowID();
     }
 
     @Override

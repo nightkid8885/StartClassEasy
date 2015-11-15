@@ -3,6 +3,7 @@ package com.cmms.codetech.startclasseasy;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.cmms.codetech.startclasseasy.adapter.CourseAdapter;
+import com.cmms.codetech.startclasseasy.model.Course;
+
+import java.util.List;
 
 public class FeedbackCourseListActivity extends AppCompatActivity {
 
@@ -21,6 +25,9 @@ public class FeedbackCourseListActivity extends AppCompatActivity {
 
     CourseAdapter courseAdapter;
     UserDatabase dbHelper = new UserDatabase(FeedbackCourseListActivity.this);
+
+    List<Course> courseList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +50,12 @@ public class FeedbackCourseListActivity extends AppCompatActivity {
 
                 Intent i = new Intent(FeedbackCourseListActivity.this, FeedbackActivity.class);
 
-                i.putExtra("courseID", dbHelper.listStudentAllCourse().get(position).getRowID());
+//                i.putExtra("courseID", dbHelper.listStudentAllCourse().get(position).getRowID());
+                i.putExtra("courseID", courseList.get(position).getRowID());
                 i.putExtra("isEditMode", true);
 
                 startActivity(i);
+                finish();
             }
         });
 
@@ -59,7 +68,9 @@ public class FeedbackCourseListActivity extends AppCompatActivity {
     }
 
     public void inflateCourseList() {
-        courseAdapter = new CourseAdapter(this, dbHelper.listStudentFeedbackAllCourse());
+        courseList = dbHelper.listStudentFeedbackAllCourse();
+        courseAdapter = new CourseAdapter(this, courseList);
+        Log.e("list1", "list1: " + courseList);
         listViewLv.setAdapter(courseAdapter);
     }
 
