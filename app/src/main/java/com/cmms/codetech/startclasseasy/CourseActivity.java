@@ -3,15 +3,11 @@ package com.cmms.codetech.startclasseasy;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,16 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.cmms.codetech.startclasseasy.adapter.CourseDateAdapter;
 import com.cmms.codetech.startclasseasy.model.Course;
 import com.cmms.codetech.startclasseasy.model.CourseDate;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -80,12 +72,13 @@ public class CourseActivity extends AppCompatActivity {
 
         initView();
 
-        Log.e(TAG, "1");
-
         extras = getIntent().getExtras();
-        isEditMode = extras.getBoolean("isEditMode");
 
-        if (isEditMode){
+        if (getIntent().hasExtra("isEditMode" )) {
+            isEditMode = extras.getBoolean("isEditMode" );
+        }
+
+        if (isEditMode) {
             courseNameEt.setEnabled(false);
             conductorNameEt.setEnabled(false);
             courseStatusRg.setEnabled(false);
@@ -95,7 +88,7 @@ public class CourseActivity extends AppCompatActivity {
             editCourseLl.setVisibility(View.VISIBLE);
             courseDateLv.setClickable(false);
 
-            List<Course> course = dbHelper.getCourse(extras.getLong("rowID"));
+            List<Course> course = dbHelper.getCourse(extras.getLong("rowID" ));
             String courseName = course.get(0).getCourseName();
             String trainerName = course.get(0).getCourseTrainer();
             //String courseStatus = course.get(0).getCourseStatus();
@@ -103,7 +96,7 @@ public class CourseActivity extends AppCompatActivity {
             courseNameEt.setText(courseName);
             conductorNameEt.setText(trainerName);
 
-            inflateCourseDateListView(extras.getLong("rowID"), isEditMode);
+            inflateCourseDateListView(extras.getLong("rowID" ), isEditMode);
 
         }
         //http://androidexample.com/In_this_example_creating_a_date_picker_to_pick_day__month_year_of_date/index.php?view=article_discription&aid=89&aaid=113
@@ -121,11 +114,11 @@ public class CourseActivity extends AppCompatActivity {
                 Intent i = new Intent(CourseActivity.this, AttendanceActivity.class);
                 i.putExtra("isEditMode", false);
 
-                if (isEditMode){
+                if (isEditMode) {
                     i.putExtra("dateID", courseDateList.get(position).getRowID());
                     i.putExtra("courseDate", courseDateList.get(position).getCourseDate());
-                    i.putExtra("courseID", extras.getLong("rowID"));
-                }else{
+                    i.putExtra("courseID", extras.getLong("rowID" ));
+                } else {
                     i.putExtra("dateID", courseDateList.get(position).getRowID());
                     i.putExtra("courseDate", courseDateList.get(position).getCourseDate());
                     i.putExtra("courseID", courseID);
@@ -148,7 +141,7 @@ public class CourseActivity extends AppCompatActivity {
                 courseStatusRg.setEnabled(true);
                 courseDateLv.setEnabled(true);
 
-                inflateCourseDateListView(extras.getLong("rowID"), false);
+                inflateCourseDateListView(extras.getLong("rowID" ), false);
             }
         });
 
@@ -158,9 +151,9 @@ public class CourseActivity extends AppCompatActivity {
                 Intent i = new Intent(CourseActivity.this, ChooseAttendeeActivity.class);
                 i.putExtra("isEditMode", false);
 
-                if (isEditMode){
-                    i.putExtra("courseID", extras.getLong("rowID"));
-                }else{
+                if (isEditMode) {
+                    i.putExtra("courseID", extras.getLong("rowID" ));
+                } else {
                     i.putExtra("courseID", courseID);
                 }
 
@@ -184,11 +177,11 @@ public class CourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (courseNameEt.getText().toString().matches("")) {
+                if (courseNameEt.getText().toString().matches("" )) {
                     Toast.makeText(getApplicationContext(), "Course name cannot be empty", Toast.LENGTH_LONG).show();
                     courseNameEt.requestFocus();
-                }else{
-                    if (conductorNameEt.getText().toString().matches("")) {
+                } else {
+                    if (conductorNameEt.getText().toString().matches("" )) {
                         Toast.makeText(getApplicationContext(), "Trainer name cannot be empty", Toast.LENGTH_LONG).show();
                         conductorNameEt.requestFocus();
 
@@ -239,20 +232,33 @@ public class CourseActivity extends AppCompatActivity {
 
     }
 
-    public void onSaveInstanceState(Bundle savedInstanceState){
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putLong("rowID", extras.getLong("rowID"));
+        savedInstanceState.putLong("rowID", extras.getLong("rowID" ));
         savedInstanceState.putBoolean("isEditMode", isEditMode);
 
-        Log.e(TAG, "2");
+        Log.e(TAG, "2" );
     }
 
-    public void onRestoreInstanceState(Bundle savedInstanceState){
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        courseID = savedInstanceState.getLong("rowID");
-        isEditMode = savedInstanceState.getBoolean("isEditMode");
+        courseID = savedInstanceState.getLong("rowID" );
+        isEditMode = savedInstanceState.getBoolean("isEditMode" );
 
-        Log.e(TAG, "3");
+        Log.e(TAG, String.valueOf(courseID));
+        Log.e(TAG, String.valueOf(isEditMode));
+
+        List<Course> course = dbHelper.getCourse(courseID);
+        String courseName = course.get(0).getCourseName();
+        String trainerName = course.get(0).getCourseTrainer();
+        //String courseStatus = course.get(0).getCourseStatus();
+
+        courseNameEt.setText(courseName);
+        conductorNameEt.setText(trainerName);
+
+        inflateCourseDateListView(courseID, isEditMode);
+
+        Log.e(TAG, "3" );
     }
 
     @Override
@@ -281,14 +287,13 @@ public class CourseActivity extends AppCompatActivity {
 
             // Show selected date
             Toast.makeText(getApplicationContext(), new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "), Toast.LENGTH_SHORT).show();
+                    .append("-" ).append(day).append("-" ).append(year)
+                    .append(" " ), Toast.LENGTH_SHORT).show();
 
             Toast.makeText(getApplicationContext(), "Course ID " + String.valueOf(courseID), Toast.LENGTH_SHORT).show();
 
             dbHelper.addCourseDate(courseID, new StringBuilder().append(year)
-                    .append("-").append(month + 1).append("-").append(day)
-                    .append(" 00:00:00").toString());
+                    .append("-" ).append(month + 1).append("-" ).append(day).toString());
             // Output.setText(new StringBuilder().append(month + 1)
             //        .append("-").append(day).append("-").append(year)
             //         .append(" "));
@@ -298,7 +303,7 @@ public class CourseActivity extends AppCompatActivity {
         }
     };
 
-    public void inflateCourseDateListView(Long courseID, boolean mode){
+    public void inflateCourseDateListView(Long courseID, boolean mode) {
 
         courseDateList = dbHelper.listCourseDate(courseID);
 

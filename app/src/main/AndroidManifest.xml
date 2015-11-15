@@ -30,6 +30,7 @@
         <activity
             android:name=".CourseActivity"
             android:label="@string/title_activity_course"
+            android:launchMode="singleTop"
             android:parentActivityName=".CourseListActivity"></activity>
         <activity
             android:name=".StudentActivity"

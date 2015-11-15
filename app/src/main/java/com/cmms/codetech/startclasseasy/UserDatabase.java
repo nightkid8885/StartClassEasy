@@ -293,6 +293,60 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    //Check if exist attendance before remove
+    public List<Attendee> checkIfAttended(Long stuID, Long courseID){
+        List<Attendee> list = new ArrayList<Attendee>();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
+        String selectQuery = "SELECT " + ROWID + " FROM " + SQLITE_TABLE_STUDENT_ATTENDANCE
+                + " WHERE " + MST_ROWID + " = " + stuID
+                + " AND " + STU_LS2_CRS_ID + " = " + courseID;
+
+        Log.e("Select getCourse", selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new Attendee(cursor.getLong(cursor.getColumnIndex(ROWID))));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return list;
+
+    }
+
+    //Check if exist attendance before able to NFC tag
+    public boolean checkIfValidCourseStudent(Long stuID, Long courseID){
+        List<Attendee> list = new ArrayList<Attendee>();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
+        String selectQuery = "SELECT " + ROWID + " FROM " + SQLITE_TABLE_STUDENT_COURSES
+                + " WHERE " + MST_ROWID + " = " + stuID
+                + " AND " + STU_LS1_CRS_ID + " = " + courseID;
+
+        Log.e("Select getCourse", selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new Attendee(cursor.getLong(cursor.getColumnIndex(ROWID))));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        if (list.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
     //Add Course Date
     public long addCourseDate(long courseID, String courseDate) {
         SQLiteDatabase db = getWritableDatabase();
@@ -465,7 +519,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + " WHERE " + SQLITE_TABLE_COURSE + "." + ROWID + "=" + SQLITE_TABLE_STUDENT_COURSES+ "." + MST_ROWID
                 + " AND " + SQLITE_TABLE_STUDENT_COURSES + "." + MST_ROWID + "=1";
 
-        Log.e("Select Query", selectQuery);
+        Log.e("listStudentAllCourse", selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
@@ -536,13 +590,23 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
+                if (cursor.getInt(5) == 1){
+                    list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
+                            cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
+                            cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
+                            cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
+                            cursor.getLong(4),
+                            true));
+                }else{
+                    list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
+                            cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
+                            cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
+                            cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
+                            cursor.getLong(4),
+                            false));
+                }
 
-                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
-                        cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
-                        cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
-                        cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
-                        cursor.getLong(4),
-                                cursor.getLong(5)));
+
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -581,7 +645,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
                         cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
                         cursor.getLong(4),
-                        cursor.getLong(5)));
+                        cursor.getInt(5)));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -623,7 +687,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
                         cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
                         cursor.getLong(4),
-                        cursor.getLong(5)));
+                        cursor.getInt(5)));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -679,6 +743,33 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
         String selectQuery = "SELECT * FROM " + SQLITE_TABLE_STUDENT + " WHERE " + ROWID + " = " + String.valueOf(rowID);
+
+        Log.e("Select getCourse", selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new Attendee(cursor.getString(cursor.getColumnIndex(STU_MST_NAME)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_ID)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_EMAIL)),
+                        cursor.getString(cursor.getColumnIndex(STU_MST_CONTACT)),
+                        cursor.getLong(cursor.getColumnIndex(ROWID))));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return list;
+
+    }
+
+    //Check if exist for authen
+    public List<Attendee> authStudent(String emailID){
+        List<Attendee> list = new ArrayList<Attendee>();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
+        String selectQuery = "SELECT * FROM " + SQLITE_TABLE_STUDENT + " WHERE " + STU_MST_EMAIL + " = '" + emailID + "'";
 
         Log.e("Select getCourse", selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
