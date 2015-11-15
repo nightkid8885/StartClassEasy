@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/ac_courseLinearLl"
-        android:background="#03A9F4"
+        android:background="#7ec5e6"
         android:orientation="vertical"
         android:paddingBottom="60px"
         android:paddingLeft="80px"
@@ -93,6 +93,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:text="Create Course" />
 
         </LinearLayout>
@@ -108,6 +115,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:text="Edit" />
 
         </LinearLayout>
@@ -123,6 +137,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:text="Add Date" />
 
             <Button
@@ -130,6 +151,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:text="Attendee" />
         </LinearLayout>
 

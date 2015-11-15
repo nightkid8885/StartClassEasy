@@ -248,11 +248,17 @@ public class AttendanceActivity extends Activity {
                 Toast.makeText(AttendanceActivity.this, "Read content: " + result, Toast.LENGTH_SHORT ).show();
                 Toast.makeText(AttendanceActivity.this, "CourseID = " + String.valueOf(extras.getLong("courseID")) + ", dateID = " + String.valueOf(extras.getLong("dateID")), Toast.LENGTH_SHORT ).show();
 
-                if (dbHelper.addCourseAttendance(extras.getLong("dateID"), extras.getLong("courseID"), Long.valueOf(result))){
-                    inflateAttendeeList();
+                //Check if it is course valid student
+                Log.e(TAG, String.valueOf(dbHelper.checkIfValidCourseStudent(Long.valueOf(result), extras.getLong("courseID" ))));
+                if (dbHelper.checkIfValidCourseStudent(Long.valueOf(result), extras.getLong("courseID" ))){
+                    if (dbHelper.addCourseAttendance(extras.getLong("dateID"), extras.getLong("courseID"), Long.valueOf(result))){
+                        inflateAttendeeList();
+                    }else{
+                        Toast.makeText(AttendanceActivity.this, "Insert Failed", Toast.LENGTH_SHORT ).show();
+                    };
                 }else{
-                    Toast.makeText(AttendanceActivity.this, "Insert Failed", Toast.LENGTH_SHORT ).show();
-                };
+                    Toast.makeText(AttendanceActivity.this, "You are not a valid course student, please register first", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
