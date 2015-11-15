@@ -52,6 +52,10 @@
             android:label="@string/title_feedback_form"
             android:parentActivityName=".MenuActivity"></activity>
         <activity
+            android:name=".FeedbackCourseListActivity"
+            android:label="@string/title_activity_feedback_list"
+            android:parentActivityName=".MenuActivity"></activity>
+        <activity
             android:name=".AndroidDatabaseManager"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity

@@ -8,6 +8,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 
 import com.cmms.codetech.startclasseasy.model.Attendee;
 import com.cmms.codetech.startclasseasy.model.Course;
@@ -56,6 +59,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static final String CRS_LS2_ANS_7 = "crs_ls2_ans_7";
     public static final String CRS_LS2_ANS_8 = "crs_ls2_ans_8";
     public static final String CRS_LS2_ANS_9 = "crs_ls2_ans_9";
+    public static final String CRS_LS2_STATUS = "crs_ls2_status";
 
     public static final String STU_LS1_CRS_ID = "stu_ls1_atd_course";
     public static final String STU_LS1_ATD_STS = "stu_ls1_atd_sts";
@@ -191,6 +195,8 @@ public class UserDatabase extends SQLiteOpenHelper {
             + " TEXT,"
             + CRS_LS2_ANS_9
             + " TEXT,"
+            + CRS_LS2_STATUS
+            + " TEXT,"
             + AUDIT_USER
             + " TEXT,"
             + AUDIT_DATE
@@ -325,6 +331,79 @@ public class UserDatabase extends SQLiteOpenHelper {
 
     }
 
+    //Update Feedback form
+    public boolean updateAttendeeFeedback(Long courseID, String rememberKeyPtsRb, String understandReexplainRb,
+                                          String confidentTransferRb, String instructorPreparedRb, String instructorDeliveryRb, String instructorEngagementRb,
+                                          String workedWellFeedback, String improvementFeedback, String overallFeedback, String status) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(CRS_LS2_ANS_1, rememberKeyPtsRb);
+        initialValues.put(CRS_LS2_ANS_2, understandReexplainRb);
+        initialValues.put(CRS_LS2_ANS_3, confidentTransferRb);
+        initialValues.put(CRS_LS2_ANS_4, instructorPreparedRb);
+        initialValues.put(CRS_LS2_ANS_5, instructorDeliveryRb);
+        initialValues.put(CRS_LS2_ANS_6, instructorEngagementRb);
+        initialValues.put(CRS_LS2_ANS_7, workedWellFeedback);
+        initialValues.put(CRS_LS2_ANS_8, improvementFeedback);
+        initialValues.put(CRS_LS2_ANS_9, overallFeedback);
+        initialValues.put(CRS_LS2_STATUS, status);
+
+        Log.e("Select feedback", "SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' " );
+        Log.e("Select feedback count", String.valueOf(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount()));
+//        if(db.rawQuery("SELECT * FROM " + SQLITE_TABLE_COURSE_FEEDBACK + " WHERE " + MST_ROWID + " = " + String.valueOf(courseID) + " AND " + CRS_LS2_STATUS + " = 'True' ", null).getCount() == 0) {
+        //        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = " + String.valueOf(stuID) + " AND " + MST_ROWID +   "= " + String.valueOf(courseID), null) > 0){
+        if (db.update(SQLITE_TABLE_COURSE_FEEDBACK, initialValues, CRS_LS2_STU_ID + " = 1" + " AND " + MST_ROWID + "= " + String.valueOf(courseID), null) > 0) {
+
+            return true;
+        } else {
+
+            return false;
+        }
+//        } else {
+//            return false;
+//        }
+
+    }
+
+    //To prevent user from doing the same feedback again - user can only do once
+    public List<Course> listStudentFeedbackAllCourse(){
+        List<Course> list = new ArrayList<Course>();
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //String selectQuery = "SELECT * FROM " + SQLITE_TABLE_COURSE_DATE;
+        String selectQuery = "SELECT " + SQLITE_TABLE_COURSE + "." + ROWID + " as rowid, " + SQLITE_TABLE_COURSE + "." + CRS_MST_CRS_NAME + ", " + SQLITE_TABLE_COURSE + "." + CRS_MST_CON_NAME + ", " + SQLITE_TABLE_COURSE + "." + CRS_MST_CRS_STS + " FROM " + SQLITE_TABLE_COURSE + " INNER JOIN " + SQLITE_TABLE_COURSE_FEEDBACK + " ON " + SQLITE_TABLE_COURSE + "." + ROWID + " = "
+                + SQLITE_TABLE_COURSE_FEEDBACK + "." + MST_ROWID + " INNER JOIN " + SQLITE_TABLE_STUDENT + " ON " + SQLITE_TABLE_COURSE_FEEDBACK + "." + CRS_LS2_STU_ID + " = "
+                + SQLITE_TABLE_STUDENT + "." + ROWID + " WHERE " + SQLITE_TABLE_COURSE_FEEDBACK + "." + CRS_LS2_STATUS + " is NULL AND " + SQLITE_TABLE_STUDENT + "." + ROWID + " = 1";
+
+        Log.e("Select Feedback Query", selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                Course c = new Course(cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_NAME)),
+                        cursor.getString(cursor.getColumnIndex(CRS_MST_CON_NAME)),
+                        cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
+                        cursor.getLong(cursor.getColumnIndex(ROWID)));
+                list.add(c);
+                //list
+                Log.e("list", "list: " + list);
+                Log.e("DDDD", "DD: " + c.getRowID() + " " + c.getCourseName() + " " + c.getCourseStatus() + " " + c.getCourseTrainer());
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        Log.e("Check Size", String.valueOf(list.size()));
+
+        return list;
+    };
+
+    //List Course Date
     public List<CourseDate> listCourseDate(long courseID) {
 
         List<CourseDate> list = new ArrayList<CourseDate>();

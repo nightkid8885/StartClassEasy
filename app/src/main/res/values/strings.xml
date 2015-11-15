@@ -8,6 +8,7 @@
     <string name="title_activity_attendee">New Attendee</string>
     <string name="title_activity_attendee_list">Attendees</string>
     <string name="title_feedback_form">Feedback Form</string>
+    <string name="title_activity_feedback_list">FeedbackCourseList</string>
     <!--<string-array name="sports_array">-->
         <!--<item>Shuttle Badminton</item>-->
         <!--<item>Tennis</item>-->

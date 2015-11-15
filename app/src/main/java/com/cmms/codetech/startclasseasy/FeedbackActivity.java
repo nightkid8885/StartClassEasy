@@ -35,6 +35,11 @@ public class FeedbackActivity extends AppCompatActivity {
     LinearLayout fourthPartQuestion;
     LinearLayout fifthPartQuestion;
 
+    UserDatabase dbHelper = new UserDatabase(FeedbackActivity.this);
+    Boolean inserted;
+    Bundle extras;
+    Long courseID;
+
     Button submitBtn;
 
     static final String TAG = "FeedbackActivity";
@@ -47,6 +52,12 @@ public class FeedbackActivity extends AppCompatActivity {
         initView();
 
         setButtonListener();
+
+        extras = getIntent().getExtras();
+        courseID = extras.getLong("courseID");
+
+
+        Log.e(TAG, String.valueOf(courseID));
 
     }
 
@@ -115,11 +126,32 @@ public class FeedbackActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "This field cannot be empty", Toast.LENGTH_LONG).show();
                     overallFeedback.requestFocus();
                 } else {
-                    Log.d(TAG, "Collected Data:" + "rememberKeyPtsRb:" + rememberKeyPtsRb.getRating() + "understandReexplainRb:" + understandReexplainRb.getRating()
-                            + "confidentTransferRb:" + confidentTransferRb.getRating() + "instructorPreparedRb:"
-                            + instructorPreparedRb.getRating() + "instructorDeliveryRb:" + instructorDeliveryRb.getRating() + "instructorEngagementRb:"
-                            + instructorEngagementRb.getRating() + "workedWellFeedback:" + workedWellFeedback.getText() + "improvementFeedback:"
-                            + improvementFeedback.getText() + "overallFeedback:" + overallFeedback.getText() );
+
+                    Intent i = new Intent();
+
+                    inserted = dbHelper.updateAttendeeFeedback(courseID, String.valueOf(rememberKeyPtsRb.getRating()), String.valueOf(understandReexplainRb.getRating()), String.valueOf(confidentTransferRb.getRating()), String.valueOf(instructorPreparedRb.getRating()), String.valueOf(instructorDeliveryRb.getRating()), String.valueOf(instructorEngagementRb.getRating()), String.valueOf(workedWellFeedback.getText()), String.valueOf(improvementFeedback.getText()), String.valueOf(overallFeedback.getText()), "True");
+
+                    if(inserted){
+                        i.putExtra("inserted", inserted);
+                        setResult(Activity.RESULT_OK, i);
+                        finish();
+                        Toast.makeText(getApplicationContext(), "Successful", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Insert Course Attendee Failed", Toast.LENGTH_LONG).show();
+                    }
+
+
+
+
+//                    updateAttendeeFeedback(Long stuID, Long courseID, String firstPartQuestion, String secondPartQuestion, String thirdPartQuestion,
+//                            String fourthPartQuestion, String fifthPartQuestion, String rememberKeyPtsRb, String understandReexplainRb,
+//                            String confidentTransferRb, String instructorPreparedRb, String instructorDeliveryRb, String instructorEngagementRb,
+//                            String workedWellFeedback, String improvementFeedback, String overallFeedback)
+//                    Log.d(TAG, "Collected Data:" + "rememberKeyPtsRb:" + rememberKeyPtsRb.getRating() + "understandReexplainRb:" + understandReexplainRb.getRating()
+//                            + "confidentTransferRb:" + confidentTransferRb.getRating() + "instructorPreparedRb:"
+//                            + instructorPreparedRb.getRating() + "instructorDeliveryRb:" + instructorDeliveryRb.getRating() + "instructorEngagementRb:"
+//                            + instructorEngagementRb.getRating() + "workedWellFeedback:" + workedWellFeedback.getText() + "improvementFeedback:"
+//                            + improvementFeedback.getText() + "overallFeedback:" + overallFeedback.getText() );
                 }
             }
 
