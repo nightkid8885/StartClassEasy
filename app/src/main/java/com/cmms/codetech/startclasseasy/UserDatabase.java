@@ -703,6 +703,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(CRS_MST_CRS_STS)),
                         cursor.getLong(cursor.getColumnIndex(ROWID)));
                 list.add(c);
+                //list
                 Log.e("list", "list: " + list);
                 Log.e("DDDD", "DD: " + c.getRowID() + " " + c.getCourseName() + " " + c.getCourseStatus() + " " + c.getCourseTrainer());
             } while (cursor.moveToNext());
